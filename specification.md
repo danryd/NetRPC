@@ -4,8 +4,10 @@
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
 
 ## 2. The ABC of NetRPC
-Address denotes an enpoint on which to send messages to
+Address denotes an enpoint on which to send messages to.
+A binding defines what transport and what serialization technique that is used. Also defines additional communication requirements, for example message security
 ### 2.1 Transport
+All heavy lifting should be put on the underlying transport. Ie. auth should be handled by the HTTP layer in case of HTTP
 ### 2.1.1 HTTP
 Post to uri
 Response of 500 if invalid post
