@@ -17,27 +17,21 @@ namespace NetRPC.Serialization
 
         public override ResponseEnvelope DeserializeResponse(Byte[] request)
         {
-            throw new NotImplementedException();
+            var json = Encoding.UTF8.GetString(request);
+            return fastJSON.JSON.ToObject<ResponseEnvelope>(json);
         }
 
-        public override object Parameter(Parameter parameter)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override Parameter Parameter(object o)
-        {
-            throw new NotImplementedException();
-        }
-
+      
         public override byte[] SerializeRequest(RequestEnvelope request)
         {
-            throw new NotImplementedException();
+            var json = fastJSON.JSON.ToJSON(request);
+            return json.ToByteArray();
         }
 
-        public override byte[] SerializeReponose(ResponseEnvelope response)
+        public override byte[] SerializeResponse(ResponseEnvelope response)
         {
-            throw new NotImplementedException();
+            var json = fastJSON.JSON.ToJSON(response);
+            return json.ToByteArray();
         }
     }
 }

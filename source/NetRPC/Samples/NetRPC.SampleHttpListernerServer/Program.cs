@@ -26,7 +26,8 @@ namespace NetRPC.SampleHttpListernerServer
     interface IExample
     {
         string Echo(string input);
-        void CallVoid(string input);
+        void CallVoid();
+        void CallMethod(string input);
         string GetResponse();
     }
 
@@ -39,12 +40,16 @@ namespace NetRPC.SampleHttpListernerServer
         }
 
 
-        public void CallVoid(string input)
+        public void CallVoid()
+        {
+            Console.WriteLine("Got call");
+
+        }
+        public void CallMethod(string input)
         {
             Console.WriteLine("Got {0}", input);
 
         }
-
         public string GetResponse()
         {
             var output = "Response";

@@ -32,8 +32,7 @@ namespace NetRPC.Hosting
             workerThread.Start();
         }
 
-        private CancellationTokenSource cancellationTokenSource;
-        private async void Listen(object o)
+         private async void Listen(object o)
         {
             while (isOpen)
             {

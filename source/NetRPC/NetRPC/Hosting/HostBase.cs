@@ -32,8 +32,7 @@ namespace NetRPC.Hosting
         }
         protected void OnReceive(string endpointAddress, Stream payload)
         {
-            var endpoint = endpoints[endpointAddress];
-            var instance = endpoint.CreateInstance();
+           
         }
         public void Dispose()
         {

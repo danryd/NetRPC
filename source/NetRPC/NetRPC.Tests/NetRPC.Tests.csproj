@@ -45,6 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dispatching\DefaultDispatcherTests.cs" />
+    <Compile Include="ITest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Serialization\JsonDeserializationTests.cs" />
   </ItemGroup>

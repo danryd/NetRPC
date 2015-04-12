@@ -43,7 +43,7 @@ namespace NetRPC
     }
     public class ResponseEnvelope : Envelope
     {
-        public Parameter Result { get; set; }
+        public object Result { get; set; }
         public Error Error { get; set; }
     }
     public class Error
