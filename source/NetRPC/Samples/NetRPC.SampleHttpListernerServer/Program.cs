@@ -11,9 +11,9 @@ namespace NetRPC.SampleHttpListernerServer
     {
         static void Main(string[] args)
         {
-            using (var host = new HttpListenerHost(Consts.URI))
+            using (var host = new HostBase())
             {
-                host.AddEndpoint<IExample>(() => new ExampleService(), "Example");
+                host.AddEndpoint<IExample>(new HttpListenerTransport(Consts.URI), new DelegateServiceFactory(() => new ExampleService(), _ => { }), "Example");
                 Console.WriteLine("Host open");
                 Console.ReadKey();
             }

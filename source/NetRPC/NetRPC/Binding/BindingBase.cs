@@ -4,7 +4,7 @@
     using NetRPC.Serialization;
     public abstract class BindingBase
     {
-        public BindingBase(Serializer serializer, Dispatcher dispatcher)
+        public BindingBase(ISerializer serializer, Dispatcher dispatcher)
         {
 
         }

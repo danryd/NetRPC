@@ -1,33 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace NetRPC
+﻿namespace NetRPC
 {
     using NetRPC.Dispatching;
+    using NetRPC.Hosting;
     using NetRPC.Serialization;
+    using NetRPC.Transport;
+    using System;
     using System.IO;
     public class Pipeline
     {
-        private Func<object> factory;
+        IServiceFactory serviceFactory;
         private Type service;
         private StreamHandler streamHandler = new StreamHandler();
-        public Pipeline(Func<object> factory, Type service)
+        public Pipeline(IServiceFactory serviceFactory, Type service, ITransport transport)
         {
             // TODO: Complete member initialization
-            this.factory = factory;
+            this.serviceFactory = serviceFactory;
             this.service = service;
 
         }
-        public void Handle(Stream inputStream, Stream outputStream)
+        public string Handle(string inputStream)
         {
             var context = new NetRPCContext();
             context.InputStream = inputStream;
-            context.OutputStream = outputStream;
+            
             Handle(context);
+            return context.OutputStream;
 
         }
         protected void Handle(NetRPCContext context)
@@ -36,13 +33,9 @@ namespace NetRPC
             Dispatch(context);
             CreateResponse(context);
             Serialize(context);
-            Reply(context);
-        }
+         }
 
-        private void Reply(NetRPCContext context)
-        {
-            context.OutputStream.Close();
-        }
+       
 
         private void CreateResponse(NetRPCContext context)
         {
@@ -60,61 +53,38 @@ namespace NetRPC
 
         private void Serialize(NetRPCContext context)
         {
-            var bytes = serializer.SerializeResponse(context.Response);
-            streamHandler.WriteToStream(bytes, context.OutputStream);
-            
+            var json = serializer.SerializeResponse(context.Response);
+            context.OutputStream = json;
+
         }
 
         private Dispatcher dispatcher = new DefaultDispatcher();
         private void Dispatch(NetRPCContext context)
         {
+            var serviceInstance = serviceFactory.Create();
             try
             {
-                var result = dispatcher.Dispatch(service, context.Request.Method, factory(), context.Request.Parameters);
+                var result = dispatcher.Dispatch(service, context.Request.Method, serviceInstance, context.Request.Parameters);
                 context.Result = result;
             }
             catch (Exception ex)
             {
                 context.Error = new Error { Code = 666, Description = ex.Message };
             }
+            finally
+            {
+                serviceFactory.Release(serviceInstance);
+            }
 
         }
-        private Serializer serializer = new JsonSerializer();
+        private ISerializer serializer = new JsonSerializer();
         private void Deserialize(NetRPCContext context)
         {
-            var bytes = streamHandler.ReadAllBytes(context.InputStream);
-            context.Request = serializer.DeserializeRequest(bytes);
+            context.Request = serializer.DeserializeRequest(context.InputStream);
         }
-       
+
 
     }
 
-    public class SerializationHandler : IHandler
-    {
-        private Serializer serializer = new JsonSerializer();
-        public SerializationHandler()
-        {
-
-        }
-        public void Handle(NetRPCContext context, IHandler next)
-        {
-            SetRequest(context);
-            next.Handle(context, null);
-            SerializeAndWriteResponse(context);
-        }
-
-        private void SerializeAndWriteResponse(NetRPCContext context)
-        {
-            var bytes = serializer.SerializeResponse(context.Response);
-            context.OutputStream.Write(bytes, 0, bytes.Length);
-        }
-
-        private void SetRequest(NetRPCContext context)
-        {
-            var rqBytes = new byte[context.InputStream.Length];
-            context.InputStream.Read(rqBytes, 0, (int)context.InputStream.Length);
-            context.Request = serializer.DeserializeRequest(rqBytes);
-        }
-    }
 
 }

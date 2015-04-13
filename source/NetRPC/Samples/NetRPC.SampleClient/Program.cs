@@ -11,7 +11,7 @@ namespace NetRPC.SampleClient
 {
     class Program
     {
-        private static Serializer serializer = new JsonSerializer();
+        private static ISerializer serializer = new JsonSerializer();
         static void Main(string[] args)
         {
            
@@ -31,13 +31,13 @@ namespace NetRPC.SampleClient
             Console.ReadKey();
         }
 
-        public static void Call(byte[] payload)
+        public static void Call(string payload)
         {
             var client = WebRequest.Create(Consts.URI + "Example");
             client.Method = "POST";
             client.ContentType = "rpc/json";
             var stream = client.GetRequestStream();
-            stream.Write(payload, 0, payload.Length);
+            stream.Write(payload.ToByteArray(), 0, payload.ToByteArray().Length);
             stream.Close();
             var resp = client.GetResponse();
 

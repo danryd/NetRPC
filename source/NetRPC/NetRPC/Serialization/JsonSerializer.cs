@@ -6,32 +6,30 @@ using System.Threading.Tasks;
 
 namespace NetRPC.Serialization
 {
-   public class JsonSerializer:Serializer
+    public class JsonSerializer : ISerializer
     {
 
-        public override RequestEnvelope DeserializeRequest(Byte[] request)
+        public RequestEnvelope DeserializeRequest(string request)
         {
-            var json = Encoding.UTF8.GetString(request);
-            return fastJSON.JSON.ToObject<RequestEnvelope>(json);
+
+            return fastJSON.JSON.ToObject<RequestEnvelope>(request);
         }
 
-        public override ResponseEnvelope DeserializeResponse(Byte[] request)
+        public ResponseEnvelope DeserializeResponse(string request)
         {
-            var json = Encoding.UTF8.GetString(request);
-            return fastJSON.JSON.ToObject<ResponseEnvelope>(json);
+            return fastJSON.JSON.ToObject<ResponseEnvelope>(request);
         }
 
-      
-        public override byte[] SerializeRequest(RequestEnvelope request)
+
+        public string SerializeRequest(RequestEnvelope request)
         {
-            var json = fastJSON.JSON.ToJSON(request);
-            return json.ToByteArray();
+            return fastJSON.JSON.ToJSON(request);
         }
 
-        public override byte[] SerializeResponse(ResponseEnvelope response)
+        public string SerializeResponse(ResponseEnvelope response)
         {
             var json = fastJSON.JSON.ToJSON(response);
-            return json.ToByteArray();
+            return json;
         }
     }
 }

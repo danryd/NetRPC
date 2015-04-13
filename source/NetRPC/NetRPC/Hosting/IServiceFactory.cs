@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NetRPC
+namespace NetRPC.Hosting
 {
-    public interface IHandler
+    public interface IServiceFactory
     {
-        void Handle(NetRPCContext context, IHandler next);
+        object Create();
+        void Release(object o);
     }
 }

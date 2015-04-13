@@ -8,12 +8,12 @@ namespace NetRPC.Tests.Serialization
     using System.Text;
     class JsonDeserializationTests
     {
-        private Serializer serializer = new JsonSerializer();
+        private ISerializer serializer = new JsonSerializer();
 
         public void CanDeserializeRequestTest() {
             var callId =  Guid.NewGuid();
             string payload = "{\"Version\": \"0.5\", \"Method\": \"Echo\", \"Parameters\": [], \"CallId\":\"" +callId.ToString() + "\" }";
-            var request = serializer.DeserializeRequest(payload.ToByteArray());
+            var request = serializer.DeserializeRequest(payload);
             request.Method.ShouldEqual("Echo");
             request.CallId.ShouldEqual(callId);
             request.Parameters.Length.ShouldEqual(0);
@@ -23,7 +23,7 @@ namespace NetRPC.Tests.Serialization
         {
             var callId = Guid.NewGuid();
             string payload = "{\"Version\": \"0.5\", \"Method\": \"Echo\", \"Parameters\": [{\"Type\":\"string\",\"Value\":\"hej\"}], \"CallId\":\"" + callId.ToString() + "\" }";
-            var request = serializer.DeserializeRequest(payload.ToByteArray());
+            var request = serializer.DeserializeRequest(payload);
             request.Parameters.Length.ShouldEqual(1);;
             request.Parameters[0].Type.ShouldEqual("string");
             request.Parameters[0].Value.ShouldEqual("hej");

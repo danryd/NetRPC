@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NetRPC.Transport;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,19 +10,17 @@ using System.Threading.Tasks;
 
 namespace NetRPC.Hosting
 {
-    public abstract class HostBase : IDisposable
+    public class HostBase : IDisposable
     {
         private readonly Dictionary<string, Endpoint> endpoints;
-        protected HostBase()
+        public  HostBase()
         {
              endpoints = new Dictionary<string, Endpoint>();
         }
 
-       
-
-        public void AddEndpoint<TContract>(Func<object> factory, string relativeAddress) where TContract : class
+        public void AddEndpoint<TContract>(ITransport transport, IServiceFactory serviceFactory, string relativeAddress) where TContract : class
         {
-            var endpoint = new Endpoint(typeof(TContract), factory, relativeAddress);
+            var endpoint = new Endpoint(typeof(TContract), transport,serviceFactory, relativeAddress);
             endpoints.Add(relativeAddress, endpoint);
         }
         protected Endpoint FindEndpoint(string endpointUri)
@@ -30,16 +29,13 @@ namespace NetRPC.Hosting
                 return endpoints[endpointUri];
             throw new InvalidOperationException("Endpoint not found");
         }
-        protected void OnReceive(string endpointAddress, Stream payload)
-        {
-           
-        }
+       
         public void Dispose()
         {
             Dispose(true);
         }
 
-        protected abstract void Dispose(bool isDisposing);
+        protected virtual void Dispose(bool isDisposing) { }
 
     }
 }
