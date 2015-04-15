@@ -18,8 +18,8 @@ namespace NetRPC.Hosting
             this.container = container;
         }
 
-        protected string Process(string endpoint, string message) {
-            return container.Handle(endpoint, message);
+        protected Task<string> Process(string endpoint, string message) {
+            return Task.Run<string>(()=> container.Handle(endpoint, message));
         }
         public void Dispose()
         {

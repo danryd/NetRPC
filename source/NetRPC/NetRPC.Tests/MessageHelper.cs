@@ -37,7 +37,7 @@ namespace NetRPC.Tests
 
         public static string GenerateJsonResponse(string method, object parameter = null, Dictionary<string, string> headers = null, Error error = null)
         {
-            throw new NotImplementedException();
+            return serializer.SerializeResponse(GenerateResponse(method, parameter, headers, error));
         }
         public static Response GenerateResponse(string method, object parameter = null, Dictionary<string, string> headers = null, Error error = null)
         {

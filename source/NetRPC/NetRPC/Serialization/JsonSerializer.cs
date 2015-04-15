@@ -27,8 +27,10 @@ namespace NetRPC.Serialization
             return fastJSON.JSON.ToObject(parameter.Value, Type.GetType(parameter.Type));
         }
         public Parameter SerializeToParameter(object o) {
+            if (o == null)
+                return null;
             var para = new Parameter();
-            para.Value = fastJSON.JSON.ToJSON(o);
+            para.Value = fastJSON.JSON .ToJSON(o);
             para.Type = o.GetType().Name;
             return para;
         }

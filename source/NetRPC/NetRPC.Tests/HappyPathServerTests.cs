@@ -12,19 +12,32 @@ namespace NetRPC.Tests
     {
         private string happyPathURI = "http://localhost:9999/";
         private ISerializer serializer = new JsonSerializer();
-        protected void CanCallVoidMethod()
+        public void CanCallVoidMethod()
         {
-             var container = new ServiceContainer();
-             var factory = new DelegateServiceFactory(() => { return new HappyPathService(); }, _ => { return; });
-             container.AddEndpoint(new Endpoint("Happy", factory));
-          
+            var payload = GetCall("Call");
+            var result = TestMethod(payload);
+            result.ShouldContain("Void");
+        }
+        public void CanCallComplex()
+        {
+            var payload = GetCall("Complex", new object[] { new Complex { Data = "hey", Value = 4 } });
+            var result = TestMethod(payload);
+            result.ShouldContain("hey4");
+
+        }
+        private string TestMethod(string payload)
+        {
+            var container = new ServiceContainer();
+            var factory = new DelegateServiceFactory(() => { return new HappyPathService(); }, _ => { return; });
+            container.AddEndpoint(new Endpoint("Happy", typeof(IHappyPath), factory));
+
             using (var host = new HttpListenerHost(happyPathURI, container))
             {
-                Execute(GetCall("Call"));
+                return Execute(payload);
             }
         }
 
-        private void Execute(string payload)
+        private string Execute(string payload)
         {
             var client = WebRequest.Create(happyPathURI + "Happy");
             client.Method = "POST";
@@ -35,12 +48,11 @@ namespace NetRPC.Tests
             var resp = (HttpWebResponse)client.GetResponse();
             resp.StatusCode.ShouldEqual(HttpStatusCode.OK);
             var responseStream = resp.GetResponseStream();
-            var respBytes = new byte[responseStream.Length];
-            responseStream.Read(respBytes, 0, (int)responseStream.Length);
-            Console.WriteLine(Encoding.UTF8.GetString(respBytes));
+            var respText = new StreamHandler().ReadToString(responseStream);
+            return respText;
         }
 
-        protected string GetCall(string method)
+        protected string GetCall(string method, object[] parameters = null)
         {
             var request = new Request
             {
@@ -58,7 +70,13 @@ namespace NetRPC.Tests
 
         public void Call()
         {
-            throw new NotImplementedException();
+            return;
+        }
+
+
+        public Complex Complex(Complex complex)
+        {
+            return new Complex { Data = complex.Data + complex.Value.ToString(), Value = complex.Value * 2 };
         }
     }
 
@@ -66,5 +84,12 @@ namespace NetRPC.Tests
     {
         void Call();
 
+        Complex Complex(Complex complex);
     }
+    public class Complex
+    {
+        public string Data { get; set; }
+        public int Value { get; set; }
+    }
+
 }

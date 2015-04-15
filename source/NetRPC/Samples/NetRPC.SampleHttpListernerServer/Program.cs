@@ -14,8 +14,8 @@ namespace NetRPC.SampleHttpListernerServer
         static void Main(string[] args)
         {
             var container = new ServiceContainer();
-            var pipe = new Pipeline(new JsonSerializer(), new DelegateServiceFactory(() => new ExampleService(), _ => { }),new DefaultInvoker());
-            var endpoint = new Endpoint("Example", pipe);
+            var pipe = new Pipeline(typeof(IExample),new JsonSerializer(), new DelegateServiceFactory(() => new ExampleService(), _ => { }),new DefaultInvoker());
+            var endpoint = new Endpoint("Example",typeof(IExample), pipe);
             container.AddEndpoint(endpoint);
             using (var host = new HttpListenerHost(Consts.URI, container))
             {

@@ -6,17 +6,18 @@
     using NetRPC.Transport;
     using System;
     using System.IO;
+    using System.Linq;
     public class Pipeline
     {
         private readonly IServiceFactory serviceFactory;
-        //private Type service;
+        private Type contract;
         //private StreamHandler streamHandler = new StreamHandler();
         private readonly ISerializer serializer;
-        public Pipeline(ISerializer serializer, IServiceFactory factory, IServiceInvoker invoker)
+        public Pipeline(Type contract, ISerializer serializer, IServiceFactory factory, IServiceInvoker invoker)
         {
             this.serializer = serializer;
             this.serviceFactory = factory;
-            //this.service = service;
+            this.contract = contract;
 
         }
         public string Handle(string request)
@@ -36,7 +37,7 @@
             context.RequestString = request;
             return context;
         }
-              
+
 
         private void CreateResponse(NetRPCContext context)
         {
@@ -46,7 +47,6 @@
                 SessionId = context.Request.SessionId,
                 Version = "0.5",
                 Method = context.Request.Method,
-                Result = context.Result,
                 Error = context.Error
             };
 
@@ -54,6 +54,7 @@
 
         private void Serialize(NetRPCContext context)
         {
+            context.Response.Result = serializer.SerializeToParameter(context.Result);
             var json = serializer.SerializeResponse(context.Response);
             context.ResponseString = json;
 
@@ -62,25 +63,34 @@
         private IServiceInvoker dispatcher = new DefaultInvoker();
         private void Dispatch(NetRPCContext context)
         {
-            //var serviceInstance = serviceFactory.Create();
-            //try
-            //{
-            //    var result = dispatcher.Dispatch(service, context.Request.Method, serviceInstance, context.Request.Parameters);
-            //    context.Result = result;
-            //}
-            //catch (Exception ex)
-            //{
-            //    context.Error = new Error { Code = 666, Description = ex.Message };
-            //}
-            //finally
-            //{
-            //    serviceFactory.Release(serviceInstance);
-            //}
+
+            var serviceInstance = serviceFactory.Create();
+            try
+            {
+                var result = dispatcher.Dispatch(contract, context.Request.Method, serviceInstance, context.Parameters);
+                context.Result = result;
+            }
+            catch (Exception ex)
+            {
+                context.Error = new Error { Code = 300, Description = ex.Message };
+            }
+            finally
+            {
+                serviceFactory.Release(serviceInstance);
+            }
 
         }
-           private void Deserialize(NetRPCContext context)
+        private void Deserialize(NetRPCContext context)
         {
             context.Request = serializer.DeserializeRequest(context.RequestString);
+            context.Parameters = DeserializeParameters(context);
+        }
+
+        private object[] DeserializeParameters(NetRPCContext context)
+        {
+            if (context.Request.Parameters == null)
+                return null;
+            return context.Request.Parameters.Select(p => serializer.DeserializeParameter(p)).ToArray();
         }
 
 

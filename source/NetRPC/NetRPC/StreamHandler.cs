@@ -2,10 +2,12 @@
 {
     using System.Collections.Generic;
     using System.IO;
+    using System.Text;
+    using System.Threading.Tasks;
     /// <summary>
     /// A class that encapsulates how we interact with the I/O stream.
     /// </summary>
-    class StreamHandler
+    public class StreamHandler
     {
         /// <summary>
         /// Writes all bytes to a stream
@@ -32,6 +34,11 @@
                 all.AddRange(rqBytes);
             }
             return all.ToArray();
+        }
+
+        public string ReadToString(Stream stream)
+        {
+            return Encoding.UTF8.GetString(ReadAllBytes(stream));
         }
     }
 }

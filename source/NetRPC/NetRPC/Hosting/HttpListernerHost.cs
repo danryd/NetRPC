@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace NetRPC.Hosting
 {
-    public class HttpListenerHost :HostBase
+    public class HttpListenerHost : HostBase
     {
         private HttpListener listener;
         private Thread workerThread;
@@ -17,14 +17,16 @@ namespace NetRPC.Hosting
         private Uri uri;
         private StreamHandler streamHandler = new StreamHandler();
         public HttpListenerHost(string uri, IServiceContainer container)
-            : this(uri,container, AuthenticationSchemes.Anonymous)
+            : this(uri, container, AuthenticationSchemes.Anonymous)
         {
         }
 
-        public HttpListenerHost(string uri, IServiceContainer container, AuthenticationSchemes scheme):this(uri,container, scheme,new HttpListener())
+        public HttpListenerHost(string uri, IServiceContainer container, AuthenticationSchemes scheme)
+            : this(uri, container, scheme, new HttpListener())
         {
         }
-        public HttpListenerHost(string uri , IServiceContainer container,AuthenticationSchemes scheme, HttpListener sharedListener):base(container)
+        public HttpListenerHost(string uri, IServiceContainer container, AuthenticationSchemes scheme, HttpListener sharedListener)
+            : base(container)
         {
             this.uri = new Uri(uri);
             listener = sharedListener;
@@ -36,7 +38,7 @@ namespace NetRPC.Hosting
             workerThread = new Thread(new ParameterizedThreadStart(Listen));
             workerThread.Start();
         }
-         private async void Listen(object o)
+        private async void Listen(object o)
         {
             while (isOpen)
             {
@@ -48,13 +50,9 @@ namespace NetRPC.Hosting
                 try
                 {
                     var endpointUri = uri.MakeRelativeUri(ctx.Request.Url).ToString();
-                    var message = streamHandler.ReadAllBytes(ctx.Request.InputStream);
-
-                    OnMessageReceived(new MessageReceivedEventArgs
-                    {
-                        Message = "",
-                        Endpoint = endpointUri
-                    });
+                    var message = streamHandler.ReadToString(ctx.Request.InputStream);
+                    var response = await Process(endpointUri, message);
+                    WriteOutput(ctx, response);
                 }
                 catch (InvalidOperationException ex)
                 {
@@ -62,6 +60,18 @@ namespace NetRPC.Hosting
                 }
             }
         }
+
+        private void WriteOutput(HttpListenerContext ctx, string response)
+        {
+
+            var bytes = Encoding.UTF8.GetBytes(response);
+            ctx.Response.ContentLength64 = bytes.Length;
+            ctx.Response.ContentType = "json/rpc";
+            streamHandler.WriteToStream(bytes, ctx.Response.OutputStream);
+
+            ctx.Response.Close();
+        }
+
 
 
 
@@ -75,7 +85,7 @@ namespace NetRPC.Hosting
             ctx.Response.Close();
         }
 
-        public  void Dispose(bool isDisposing)
+        public void Dispose(bool isDisposing)
         {
             if (isDisposing)
             {
@@ -83,7 +93,8 @@ namespace NetRPC.Hosting
                 listener.Close();
             }
         }
-        protected void OnMessageReceived(MessageReceivedEventArgs eventArgs) {
+        protected void OnMessageReceived(MessageReceivedEventArgs eventArgs)
+        {
             if (MessageReceiveced != null)
                 MessageReceiveced(this, eventArgs);
         }
