@@ -9,10 +9,11 @@ namespace NetRPC.Serialization
 {
     public interface ISerializer
     {
-        RequestEnvelope DeserializeRequest(string request);
-        ResponseEnvelope DeserializeResponse(string request);
-        string SerializeRequest(RequestEnvelope request);
-        string SerializeResponse(ResponseEnvelope response);
-
+        Request DeserializeRequest(string request);
+        Response DeserializeResponse(string request);
+        string SerializeRequest(Request request);
+        string SerializeResponse(Response response);
+        object DeserializeParameter(Parameter parameter);
+        Parameter SerializeToParameter(object o);
     }
 }

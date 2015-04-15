@@ -1,10 +1,10 @@
 ﻿namespace NetRPC.Binding
 {
-    using NetRPC.Dispatching;
+    using NetRPC.Invocation;
     using NetRPC.Serialization;
     public abstract class BindingBase
     {
-        public BindingBase(ISerializer serializer, Dispatcher dispatcher)
+        public BindingBase(ISerializer serializer, IServiceInvoker dispatcher)
         {
 
         }

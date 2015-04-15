@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace NetRPC.Hosting
+﻿namespace NetRPC.Hosting
 {
-    public class DelegateServiceFactory:IServiceFactory
+    using System;
+    public class DelegateServiceFactory : IServiceFactory
     {
         Func<object> factory;
         Action<object> onRelease;

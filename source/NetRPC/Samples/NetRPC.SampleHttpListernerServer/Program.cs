@@ -1,4 +1,6 @@
 ﻿using NetRPC.Hosting;
+using NetRPC.Invocation;
+using NetRPC.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +13,12 @@ namespace NetRPC.SampleHttpListernerServer
     {
         static void Main(string[] args)
         {
-            using (var host = new HostBase())
+            var container = new ServiceContainer();
+            var pipe = new Pipeline(new JsonSerializer(), new DelegateServiceFactory(() => new ExampleService(), _ => { }),new DefaultInvoker());
+            var endpoint = new Endpoint("Example", pipe);
+            container.AddEndpoint(endpoint);
+            using (var host = new HttpListenerHost(Consts.URI, container))
             {
-                host.AddEndpoint<IExample>(new HttpListenerTransport(Consts.URI), new DelegateServiceFactory(() => new ExampleService(), _ => { }), "Example");
                 Console.WriteLine("Host open");
                 Console.ReadKey();
             }

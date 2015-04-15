@@ -1,7 +1,7 @@
 ﻿namespace NetRPC
 {
     using System.Collections.Generic;
-using System.IO;
+    using System.IO;
     /// <summary>
     /// A class that encapsulates how we interact with the I/O stream.
     /// </summary>
@@ -12,7 +12,8 @@ using System.IO;
         /// </summary>
         /// <param name="bytes"></param>
         /// <param name="stream"></param>
-        public void WriteToStream(byte[] bytes, Stream stream) {
+        public void WriteToStream(byte[] bytes, Stream stream)
+        {
             stream.Write(bytes, 0, bytes.Length);
         }
 

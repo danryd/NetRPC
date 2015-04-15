@@ -9,24 +9,36 @@ namespace NetRPC.Serialization
     public class JsonSerializer : ISerializer
     {
 
-        public RequestEnvelope DeserializeRequest(string request)
+        public Request DeserializeRequest(string request)
         {
 
-            return fastJSON.JSON.ToObject<RequestEnvelope>(request);
+            return fastJSON.JSON.ToObject<Request>(request);
         }
 
-        public ResponseEnvelope DeserializeResponse(string request)
+        public Response DeserializeResponse(string request)
         {
-            return fastJSON.JSON.ToObject<ResponseEnvelope>(request);
+            return fastJSON.JSON.ToObject<Response>(request);
         }
 
+        public object DeserializeParameter(Parameter parameter)
+        {
+            if (parameter.Type == "Void")
+                return null;
+            return fastJSON.JSON.ToObject(parameter.Value, Type.GetType(parameter.Type));
+        }
+        public Parameter SerializeToParameter(object o) {
+            var para = new Parameter();
+            para.Value = fastJSON.JSON.ToJSON(o);
+            para.Type = o.GetType().Name;
+            return para;
+        }
 
-        public string SerializeRequest(RequestEnvelope request)
+        public string SerializeRequest(Request request)
         {
             return fastJSON.JSON.ToJSON(request);
         }
 
-        public string SerializeResponse(ResponseEnvelope response)
+        public string SerializeResponse(Response response)
         {
             var json = fastJSON.JSON.ToJSON(response);
             return json;

@@ -1,4 +1,6 @@
-﻿using NetRPC.Transport;
+﻿using NetRPC.Invocation;
+using NetRPC.Serialization;
+using NetRPC.Transport;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,30 +9,36 @@ using System.Text;
 
 namespace NetRPC.Hosting
 {
-    public class Endpoint
+    public class Endpoint : IEndpoint
     {
-        private readonly Type contract;
-        private readonly IServiceFactory serviceFactory;
-        private readonly string relativeAddress;
+        //private readonly Type contract;
+        //private readonly IServiceFactory serviceFactory;
+        private readonly string endpointName;
         private readonly Pipeline pipeline;
-        private readonly ITransport transport;
-        public Endpoint(Type contract, ITransport transport, IServiceFactory serviceFactory, string relativeAddress)
+        public Endpoint(string endpointName, Pipeline pipeline)
         {
-            this.contract = contract;
-            this.serviceFactory = serviceFactory;
-            this.relativeAddress = relativeAddress;
-            this.pipeline = new Pipeline(serviceFactory,contract,transport);
-            this.transport = transport;
-            this.transport.MessageReceiveced += transport_MessageReceiveced;
+           
+            this.endpointName = endpointName;
+            this.pipeline = pipeline;
+
+        }
+        public Endpoint(string endpointName, IServiceFactory serviceFactory) : 
+            this(endpointName,new Pipeline(new JsonSerializer(), serviceFactory, new DefaultInvoker())) { 
+        }
+        public string Handle(string request)
+        {
+            return pipeline.Handle(request);
         }
 
-        void transport_MessageReceiveced(object sender, MessageReceivedEventArgs e)
+        public string EndpointName
         {
-            var response = pipeline.Handle(e.Message);
-            transport.Send(response);
+            get { return endpointName; }
         }
+    }
+    public interface IEndpoint
+    {
 
-      
-
+        string EndpointName { get; }
+        string Handle(string request);
     }
 }

@@ -9,22 +9,22 @@ using System.Threading.Tasks;
 
 namespace NetRPC.Hosting
 {
-    public class HttpListenerTransport :ITransport
+    public class HttpListenerHost :HostBase
     {
         private HttpListener listener;
         private Thread workerThread;
         private bool isOpen;
         private Uri uri;
         private StreamHandler streamHandler = new StreamHandler();
-        public HttpListenerTransport(string uri)
-            : this(uri, AuthenticationSchemes.Anonymous)
+        public HttpListenerHost(string uri, IServiceContainer container)
+            : this(uri,container, AuthenticationSchemes.Anonymous)
         {
         }
 
-        public HttpListenerTransport(string uri, AuthenticationSchemes scheme):this(uri,scheme,new HttpListener())
+        public HttpListenerHost(string uri, IServiceContainer container, AuthenticationSchemes scheme):this(uri,container, scheme,new HttpListener())
         {
         }
-        public HttpListenerTransport(string uri, AuthenticationSchemes scheme, HttpListener sharedListener)
+        public HttpListenerHost(string uri , IServiceContainer container,AuthenticationSchemes scheme, HttpListener sharedListener):base(container)
         {
             this.uri = new Uri(uri);
             listener = sharedListener;
@@ -55,8 +55,6 @@ namespace NetRPC.Hosting
                         Message = "",
                         Endpoint = endpointUri
                     });
-                    //var endpoint = FindEndpoint(endpointUri);
-                    //endpoint.Handle(ctx.Request.InputStream, ctx.Response.OutputStream);
                 }
                 catch (InvalidOperationException ex)
                 {

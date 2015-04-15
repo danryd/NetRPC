@@ -12,24 +12,15 @@ namespace NetRPC.Hosting
 {
     public class HostBase : IDisposable
     {
-        private readonly Dictionary<string, Endpoint> endpoints;
-        public  HostBase()
+        private readonly IServiceContainer container;
+        public HostBase(IServiceContainer container)
         {
-             endpoints = new Dictionary<string, Endpoint>();
+            this.container = container;
         }
 
-        public void AddEndpoint<TContract>(ITransport transport, IServiceFactory serviceFactory, string relativeAddress) where TContract : class
-        {
-            var endpoint = new Endpoint(typeof(TContract), transport,serviceFactory, relativeAddress);
-            endpoints.Add(relativeAddress, endpoint);
+        protected string Process(string endpoint, string message) {
+            return container.Handle(endpoint, message);
         }
-        protected Endpoint FindEndpoint(string endpointUri)
-        {
-            if (endpoints.ContainsKey(endpointUri))
-                return endpoints[endpointUri];
-            throw new InvalidOperationException("Endpoint not found");
-        }
-       
         public void Dispose()
         {
             Dispose(true);

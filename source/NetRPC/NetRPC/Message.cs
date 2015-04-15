@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NetRPC
 {
-    public class Envelope
+    public class Message
     {
         /// <summary>
         /// 0.5
@@ -32,7 +32,7 @@ namespace NetRPC
         public Dictionary<string, string> Headers { get; set; }
 
     }
-    public class RequestEnvelope : Envelope
+    public class Request : Message
     {
         /// <summary>
         /// OPTIONAL
@@ -41,9 +41,15 @@ namespace NetRPC
         /// </summary>
         public Parameter[] Parameters;
     }
-    public class ResponseEnvelope : Envelope
+    public class Response : Message
     {
-        public object Result { get; set; }
+        /// <summary>
+        /// The output of the service
+        /// </summary>
+        public Parameter Result { get; set; }
+        /// <summary>
+        /// If error occures the error property will be set, otherwise it must be null
+        /// </summary>
         public Error Error { get; set; }
     }
     public class Error

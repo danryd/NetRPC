@@ -15,7 +15,7 @@ namespace NetRPC.SampleClient
         static void Main(string[] args)
         {
            
-            var callvoid = new RequestEnvelope
+            var callvoid = new Request
             {
                 CallId = Guid.NewGuid(),
                 SessionId = Guid.NewGuid(),

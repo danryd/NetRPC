@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NetRPC.Dispatching
+namespace NetRPC.Invocation
 {
-    public abstract class Dispatcher
+    public class DefaultInvoker:IServiceInvoker
     {
-        public object Dispatch(Type service, string action,object instance, object[] parameters)
+        
+        public object Dispatch(Type service, string action, object instance, object[] parameters)
         {
             var method = service.GetMethod(action);
             return method.Invoke(instance, parameters);
