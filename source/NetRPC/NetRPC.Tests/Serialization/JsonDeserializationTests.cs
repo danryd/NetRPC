@@ -29,11 +29,22 @@ namespace NetRPC.Tests.Serialization
             request.Parameters[0].Value.ShouldEqual("hej");
 
         }
-        //public void CanDeserializeStringParamterTest() {
-        //    var parameter = "{\"Type\":\"string\",\"Value\":\"hej\"}";
-        //    var obj = serializer.Parameter(parameter);
-        //    obj.ShouldBeType<string>();
-        //    obj.ShouldEqual("hej");
-        //}
+        public void CanSerializeToSimpleJsonTest()
+        {
+            var callId = Guid.NewGuid();
+            var sessionId = Guid.NewGuid();
+            string expected = "{\"Version\":\"0.5\",\"Method\":\"Echo\",\"CallId\":\"" + callId.ToString() + "\",\"SessionId\":\"" + sessionId.ToString() + "\",\"Headers\":null,\"Parameters\":[{\"Type\":\"string\",\"Value\":\"hej\"}]}";
+            var request = new Request
+                {
+                    Version = "0.5",
+                    CallId = callId,
+                    SessionId = sessionId,
+                    Method = "Echo",
+                    Parameters = new Parameter[] {new Parameter {Type = "string", Value = "hej"}},
+
+                };
+            var json = serializer.SerializeRequest(request);
+            json.ShouldEqual(expected);
+        }
     }
 }

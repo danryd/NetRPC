@@ -3,12 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using fastJSON;
 
 namespace NetRPC.Serialization
 {
     public class JsonSerializer : ISerializer
     {
-
+        public JsonSerializer()
+        {
+            fastJSON.JSON.Parameters = new JSONParameters
+                {
+                    UseExtensions = false,
+                    UseFastGuid = false
+                };
+        }
         public Request DeserializeRequest(string request)
         {
 

@@ -73,6 +73,7 @@
             catch (Exception ex)
             {
                 context.Error = new Error { Code = 300, Description = ex.Message };
+                throw;
             }
             finally
             {
@@ -82,8 +83,17 @@
         }
         private void Deserialize(NetRPCContext context)
         {
-            context.Request = serializer.DeserializeRequest(context.RequestString);
+            try
+            {
+context.Request = serializer.DeserializeRequest(context.RequestString);
             context.Parameters = DeserializeParameters(context);
+            }
+            catch (Exception ex)
+            {
+                throw new NetRPCException(300, ex.Message, ex);
+                
+            }
+            
         }
 
         private object[] DeserializeParameters(NetRPCContext context)
