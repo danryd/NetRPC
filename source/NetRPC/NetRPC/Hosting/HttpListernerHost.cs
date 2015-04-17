@@ -52,21 +52,21 @@ namespace NetRPC.Hosting
                     var endpointUri = uri.MakeRelativeUri(ctx.Request.Url).ToString();
                     var message = streamHandler.ReadToString(ctx.Request.InputStream);
                     var response = await Process(endpointUri, message);
-                    WriteOutput(ctx, response);
+                    Reply(ctx, response);
                 }
-                catch (InvalidOperationException ex)
+                catch (Exception ex)//Must catch all to return error
                 {
                     ReturnErrorResponse(ctx, ex.Message);
                 }
             }
         }
 
-        private void WriteOutput(HttpListenerContext ctx, string response)
+        private void Reply(HttpListenerContext ctx, string response)
         {
 
             var bytes = Encoding.UTF8.GetBytes(response);
             ctx.Response.ContentLength64 = bytes.Length;
-            ctx.Response.ContentType = "json/rpc";
+            ctx.Response.ContentType = "application/json";
             streamHandler.WriteToStream(bytes, ctx.Response.OutputStream);
 
             ctx.Response.Close();
@@ -93,17 +93,6 @@ namespace NetRPC.Hosting
                 listener.Close();
             }
         }
-        protected void OnMessageReceived(MessageReceivedEventArgs eventArgs)
-        {
-            if (MessageReceiveced != null)
-                MessageReceiveced(this, eventArgs);
-        }
-
-        public event EventHandler<MessageReceivedEventArgs> MessageReceiveced;
-
-        public void Send(string message)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }

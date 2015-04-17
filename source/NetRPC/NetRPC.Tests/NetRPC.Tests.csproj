@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Client\ClientProxyingTests.cs" />
     <Compile Include="DispatcherTests.cs" />
     <Compile Include="MessageHelper.cs" />
     <Compile Include="Hosting\ContainerTests.cs" />

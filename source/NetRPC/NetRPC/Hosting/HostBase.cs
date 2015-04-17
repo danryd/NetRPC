@@ -18,8 +18,9 @@ namespace NetRPC.Hosting
             this.container = container;
         }
 
-        protected Task<string> Process(string endpoint, string message) {
-            return Task.Run<string>(()=> container.Handle(endpoint, message));
+        protected async Task<string> Process(string endpoint, string message) {
+            var response = await Task.Run<string>(()=> container.Handle(endpoint, message));
+            return response;
         }
         public void Dispose()
         {

@@ -1,18 +1,11 @@
-﻿using NetRPC.Invocation;
-using NetRPC.Serialization;
-using NetRPC.Transport;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-
-namespace NetRPC.Hosting
+﻿namespace NetRPC.Hosting
 {
+    using NetRPC.Invocation;
+    using NetRPC.Serialization;
+    using System;
     public class Endpoint : IEndpoint
     {
         private readonly Type contract;
-        //private readonly IServiceFactory serviceFactory;
         private readonly string endpointName;
         private readonly Pipeline pipeline;
         public Endpoint(string endpointName, Type contract, Pipeline pipeline)

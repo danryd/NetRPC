@@ -44,7 +44,8 @@
   <ItemGroup>
     <Compile Include="Binding\BindingBase.cs" />
     <Compile Include="Binding\DefaultBinding.cs" />
-    <Compile Include="Client\ClientBase.cs" />
+    <Compile Include="Client\Client.cs" />
+    <Compile Include="Client\HttpTransport.cs" />
     <Compile Include="Hosting\EndpointNotFoundException.cs" />
     <Compile Include="Invocation\ServiceInvoker.cs" />
     <Compile Include="Invocation\IServiceInvoker.cs" />
@@ -56,7 +57,7 @@
     <Compile Include="Hosting\IServiceFactory.cs" />
     <Compile Include="Hosting\ServiceContainer.cs" />
     <Compile Include="NetRPCContext.cs" />
-    <Compile Include="Dispatcher.cs" />
+    <Compile Include="Pipeline.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="NetRPCException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

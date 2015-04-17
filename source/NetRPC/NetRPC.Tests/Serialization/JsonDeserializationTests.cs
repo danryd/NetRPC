@@ -29,6 +29,17 @@ namespace NetRPC.Tests.Serialization
             request.Parameters[0].Value.ShouldEqual("hej");
 
         }
+        public void CanDeserializeComplexRequestParameterRequestTest()
+        {
+            var callId = Guid.NewGuid();
+            string payload = "{\"Version\": \"0.5\", \"Method\": \"Echo\", \"Parameters\": [{\"Type\":\"NetRPC.Tests.Complex\",\"Value\":\"{\\\"Data\\\":4}\"}], \"CallId\":\"" + callId.ToString() + "\" }";
+            var request = serializer.DeserializeRequest(payload);
+            request.Parameters.Length.ShouldEqual(1); ;
+            request.Parameters[0].Type.ShouldEqual("NetRPC.Tests.Complex");
+            request.Parameters[0].Value.ShouldEqual("{\"Data\":4}");
+            
+
+        }
         public void CanSerializeToSimpleJsonTest()
         {
             var callId = Guid.NewGuid();
@@ -46,5 +57,34 @@ namespace NetRPC.Tests.Serialization
             var json = serializer.SerializeRequest(request);
             json.ShouldEqual(expected);
         }
+
+        public void CanSerializeAndDeserializeComplexType() {
+            var complex = new Complex { Data = 42 };
+            var parameter = serializer.SerializeToParameter(complex);
+            var actual = (Complex)serializer.DeserializeParameter(parameter);
+            actual.Data.ShouldEqual(42);
+        }
+        public void CanSerializeComplexJsonTest()
+        {
+            var callId = Guid.NewGuid();
+            var sessionId = Guid.NewGuid();
+            string expected = "{\"Version\":\"0.5\",\"Method\":\"Echo\",\"CallId\":\"" + callId.ToString() + "\",\"SessionId\":\"" + sessionId.ToString() + "\",\"Headers\":null,\"Parameters\":[{\"Type\":\"NetRPC.Tests.Serialization.Complex, NetRPC.Tests\",\"Value\":\"{\\\"Data\\\":4}\"}]}";
+            var request = new Request
+            {
+                Version = "0.5",
+                CallId = callId,
+                SessionId = sessionId,
+                Method = "Echo",
+                Parameters = new Parameter[] {serializer.SerializeToParameter(new Complex{Data=4} )},
+
+            };
+            var json = serializer.SerializeRequest(request);
+            json.ShouldEqual(expected);
+        }
+    }
+
+    public class Complex
+    {
+        public int Data { get; set; }
     }
 }

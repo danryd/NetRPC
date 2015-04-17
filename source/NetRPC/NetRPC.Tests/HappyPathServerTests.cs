@@ -3,20 +3,27 @@
 namespace NetRPC.Tests
 {
     using System;
+    using System.Linq;
     using System.Net;
     using System.Text;
     using NetRPC.Hosting;
     using NetRPC.Serialization;
     using Should;
+    using NetRPC.Client;
     public class HappyPathServerTests
     {
-        private string happyPathURI = "http://localhost:9999/";
+        private string happyPathURI = "http://localhost:{0}/";
         private ISerializer serializer = new JsonSerializer();
+        private static int port = 9000;
+        public HappyPathServerTests()
+        {
+            port++;
+        }
         public void CanCallVoidMethod()
         {
             var payload = GetCall("Call");
             var result = TestMethod(payload);
-            result.ShouldContain("Void");
+            result.ShouldContain("\"Result\":null");
         }
         public void CanCallComplex()
         {
@@ -25,13 +32,29 @@ namespace NetRPC.Tests
             result.ShouldContain("hey4");
 
         }
+        public void CanCallWithProxy()
+        {
+
+            var container = new ServiceContainer();
+            var factory = new DelegateServiceFactory(() => { return new HappyPathService(); }, _ => { return; });
+            container.AddEndpoint(new Endpoint("Happy", typeof(IHappyPath), factory));
+
+            using (var host = new HttpListenerHost(string.Format(happyPathURI, port), container))
+            {
+                var client = new Client<IHappyPath>(string.Format(happyPathURI, port) + "Happy");
+                var result = client.Proxy().Complex(new Complex { Data = "hej", Value = 6004 });
+                result.Value.ShouldEqual(12008);
+                result.Data.ShouldEqual("hej6004");
+            }
+
+        }
         private string TestMethod(string payload)
         {
             var container = new ServiceContainer();
             var factory = new DelegateServiceFactory(() => { return new HappyPathService(); }, _ => { return; });
             container.AddEndpoint(new Endpoint("Happy", typeof(IHappyPath), factory));
 
-            using (var host = new HttpListenerHost(happyPathURI, container))
+            using (var host = new HttpListenerHost(string.Format(happyPathURI,port), container))
             {
                 return Execute(payload);
             }
@@ -39,7 +62,7 @@ namespace NetRPC.Tests
 
         private string Execute(string payload)
         {
-            var client = WebRequest.Create(happyPathURI + "Happy");
+            var client = WebRequest.Create(string.Format(happyPathURI,port) + "Happy");
             client.Method = "POST";
             client.ContentType = "rpc/json";
             var stream = client.GetRequestStream();
@@ -59,7 +82,8 @@ namespace NetRPC.Tests
                 CallId = Guid.NewGuid(),
                 SessionId = Guid.NewGuid(),
                 Method = method,
-                Version = "0.5"
+                Version = "0.5",
+                Parameters = parameters == null ? null : parameters.Select(p => serializer.SerializeToParameter(p)).ToArray()
             };
             return serializer.SerializeRequest(request);
         }

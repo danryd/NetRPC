@@ -19,7 +19,7 @@ namespace NetRPC.Serialization
         }
         public Request DeserializeRequest(string request)
         {
-
+            
             return fastJSON.JSON.ToObject<Request>(request);
         }
 
@@ -32,14 +32,15 @@ namespace NetRPC.Serialization
         {
             if (parameter.Type == "Void")
                 return null;
-            return fastJSON.JSON.ToObject(parameter.Value, Type.GetType(parameter.Type));
+            var type= Type.GetType(parameter.Type);
+            return fastJSON.JSON.ToObject(parameter.Value,type );
         }
         public Parameter SerializeToParameter(object o) {
             if (o == null)
                 return null;
             var para = new Parameter();
             para.Value = fastJSON.JSON .ToJSON(o);
-            para.Type = o.GetType().Name;
+            para.Type = o.GetType().FullName + ", " + o.GetType().Assembly.GetName().Name;
             return para;
         }
 

@@ -60,14 +60,14 @@
 
         }
 
-        private IServiceInvoker dispatcher = new DefaultInvoker();
+        private IServiceInvoker invoker = new DefaultInvoker();
         private void Dispatch(NetRPCContext context)
         {
 
             var serviceInstance = serviceFactory.Create();
             try
             {
-                var result = dispatcher.Dispatch(contract, context.Request.Method, serviceInstance, context.Parameters);
+                var result = invoker.Dispatch(contract, context.Request.Method, serviceInstance, context.Parameters);
                 context.Result = result;
             }
             catch (Exception ex)
@@ -85,15 +85,15 @@
         {
             try
             {
-context.Request = serializer.DeserializeRequest(context.RequestString);
-            context.Parameters = DeserializeParameters(context);
+                context.Request = serializer.DeserializeRequest(context.RequestString);
+                context.Parameters = DeserializeParameters(context);
             }
             catch (Exception ex)
             {
                 throw new NetRPCException(300, ex.Message, ex);
-                
+
             }
-            
+
         }
 
         private object[] DeserializeParameters(NetRPCContext context)
