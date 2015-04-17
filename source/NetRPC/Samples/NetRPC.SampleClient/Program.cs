@@ -20,7 +20,7 @@ namespace NetRPC.SampleClient
                 CallId = Guid.NewGuid(),
                 SessionId = Guid.NewGuid(),
                 Method = "CallVoid",
-                Version = "0.5"
+                Version = Constants.Version
             };
 
             Call(serializer.SerializeRequest(callvoid));

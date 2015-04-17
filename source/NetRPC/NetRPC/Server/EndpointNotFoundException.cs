@@ -1,4 +1,4 @@
-﻿namespace NetRPC.Hosting
+﻿namespace NetRPC.Server
 {
     using System;
 

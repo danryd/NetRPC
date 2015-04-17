@@ -1,6 +1,6 @@
 ﻿namespace NetRPC.Tests
 {
-    using NetRPC.Hosting;
+    using NetRPC.Server;
     using Should;
     using Should.Core.Assertions;
     public class ServiceContainerTests

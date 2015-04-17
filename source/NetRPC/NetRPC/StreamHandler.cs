@@ -26,12 +26,12 @@
         /// <returns></returns>
         public byte[] ReadAllBytes(Stream stream)
         {
-            var rqBytes = new byte[4096];
+            var buffer = new byte[4096];
             List<byte> all = new List<byte>();
             var rep = 0;
-            while (stream.Read(rqBytes, 4096 * rep, 4096) > 0)
+            while (stream.Read(buffer, 4096 * rep, 4096) > 0)
             {
-                all.AddRange(rqBytes);
+                all.AddRange(buffer);
             }
             return all.ToArray();
         }

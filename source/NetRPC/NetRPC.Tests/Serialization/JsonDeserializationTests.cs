@@ -32,7 +32,7 @@ namespace NetRPC.Tests.Serialization
         public void CanDeserializeComplexRequestParameterRequestTest()
         {
             var callId = Guid.NewGuid();
-            string payload = "{\"Version\": \"0.5\", \"Method\": \"Echo\", \"Parameters\": [{\"Type\":\"NetRPC.Tests.Complex\",\"Value\":\"{\\\"Data\\\":4}\"}], \"CallId\":\"" + callId.ToString() + "\" }";
+            string payload = "{\"Version\": \""+Constants.Version+"\", \"Method\": \"Echo\", \"Parameters\": [{\"Type\":\"NetRPC.Tests.Complex\",\"Value\":\"{\\\"Data\\\":4}\"}], \"CallId\":\"" + callId.ToString() + "\" }";
             var request = serializer.DeserializeRequest(payload);
             request.Parameters.Length.ShouldEqual(1); ;
             request.Parameters[0].Type.ShouldEqual("NetRPC.Tests.Complex");
@@ -44,10 +44,10 @@ namespace NetRPC.Tests.Serialization
         {
             var callId = Guid.NewGuid();
             var sessionId = Guid.NewGuid();
-            string expected = "{\"Version\":\"0.5\",\"Method\":\"Echo\",\"CallId\":\"" + callId.ToString() + "\",\"SessionId\":\"" + sessionId.ToString() + "\",\"Headers\":null,\"Parameters\":[{\"Type\":\"string\",\"Value\":\"hej\"}]}";
+            string expected = "{\"Version\":\""+Constants.Version+"\",\"Method\":\"Echo\",\"CallId\":\"" + callId.ToString() + "\",\"SessionId\":\"" + sessionId.ToString() + "\",\"Headers\":null,\"Parameters\":[{\"Type\":\"string\",\"Value\":\"hej\"}]}";
             var request = new Request
                 {
-                    Version = "0.5",
+                    Version = Constants.Version,
                     CallId = callId,
                     SessionId = sessionId,
                     Method = "Echo",
@@ -68,10 +68,10 @@ namespace NetRPC.Tests.Serialization
         {
             var callId = Guid.NewGuid();
             var sessionId = Guid.NewGuid();
-            string expected = "{\"Version\":\"0.5\",\"Method\":\"Echo\",\"CallId\":\"" + callId.ToString() + "\",\"SessionId\":\"" + sessionId.ToString() + "\",\"Headers\":null,\"Parameters\":[{\"Type\":\"NetRPC.Tests.Serialization.Complex, NetRPC.Tests\",\"Value\":\"{\\\"Data\\\":4}\"}]}";
+            string expected = "{\"Version\":\"0.6\",\"Method\":\"Echo\",\"CallId\":\"" + callId.ToString() + "\",\"SessionId\":\"" + sessionId.ToString() + "\",\"Headers\":null,\"Parameters\":[{\"Type\":\"NetRPC.Tests.Serialization.Complex, NetRPC.Tests\",\"Value\":\"{\\\"Data\\\":4}\"}]}";
             var request = new Request
             {
-                Version = "0.5",
+                Version = Constants.Version,
                 CallId = callId,
                 SessionId = sessionId,
                 Method = "Echo",

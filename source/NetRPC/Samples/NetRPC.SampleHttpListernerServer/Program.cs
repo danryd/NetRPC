@@ -1,5 +1,5 @@
-﻿using NetRPC.Hosting;
-using NetRPC.Invocation;
+﻿using NetRPC.Server;
+using NetRPC.Server;
 using NetRPC.Serialization;
 using System;
 using System.Collections.Generic;

@@ -1,7 +1,7 @@
 ﻿namespace NetRPC.Tests
 {
-    using NetRPC.Hosting;
-    using NetRPC.Invocation;
+    using NetRPC.Server;
+    using NetRPC.Server;
     using NetRPC.Serialization;
     using Should;
     public class PipelineTests

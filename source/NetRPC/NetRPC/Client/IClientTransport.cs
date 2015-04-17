@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NetRPC.Hosting
+namespace NetRPC.Client
 {
-    public interface IServiceFactory
+    interface IClientTransport
     {
-        object Create();
-        void Release(object o);
+        string Request(string request);
     }
 }

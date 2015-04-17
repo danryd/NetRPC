@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NetRPC.Hosting
+namespace NetRPC.Server
 {
 
     public interface IServiceContainer

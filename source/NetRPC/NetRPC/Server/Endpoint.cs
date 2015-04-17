@@ -1,6 +1,6 @@
-﻿namespace NetRPC.Hosting
+﻿namespace NetRPC.Server
 {
-    using NetRPC.Invocation;
+    using NetRPC.Server;
     using NetRPC.Serialization;
     using System;
     public class Endpoint : IEndpoint

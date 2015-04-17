@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NetRPC
+namespace NetRPC.Server
 {
     public class NetRPCContext
     {

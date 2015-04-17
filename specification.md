@@ -61,3 +61,4 @@ Series 	Category
 100 	Serialization errors
 200		Service lookup/validation
 300		Service activation/invocation
+600		ClientSideErrors

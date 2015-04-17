@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NetRPC.Invocation
+namespace NetRPC.Server
 {
     public class DefaultInvoker:IServiceInvoker
     {

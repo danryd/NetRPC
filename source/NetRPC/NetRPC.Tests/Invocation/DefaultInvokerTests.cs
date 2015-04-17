@@ -1,7 +1,6 @@
 ﻿namespace NetRPC.Tests.Dispatching
 {
-    using NetRPC.Invocation;
-
+    using NetRPC.Server;
     using Should;
     using System;
     public class DefaultDispatcherTests

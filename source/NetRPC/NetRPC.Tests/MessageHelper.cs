@@ -23,7 +23,7 @@ namespace NetRPC.Tests
                SessionId = Guid.NewGuid(),
                Headers = headers,
                Method = method,
-               Version = "0.5",
+               Version = Constants.Version,
                Parameters = requestParameters
            };
             return request;
@@ -48,7 +48,7 @@ namespace NetRPC.Tests
                 SessionId = Guid.NewGuid(),
                 Headers = headers,
                 Method = method,
-                Version = "0.5",
+                Version = Constants.Version,
                 Result = responseParameter,
                 Error = error
             };

@@ -6,7 +6,7 @@ namespace NetRPC.Tests
     using System.Linq;
     using System.Net;
     using System.Text;
-    using NetRPC.Hosting;
+    using NetRPC.Server;
     using NetRPC.Serialization;
     using Should;
     using NetRPC.Client;
@@ -64,7 +64,7 @@ namespace NetRPC.Tests
         {
             var client = WebRequest.Create(string.Format(happyPathURI,port) + "Happy");
             client.Method = "POST";
-            client.ContentType = "rpc/json";
+            client.ContentType = Constants.ContentType;
             var stream = client.GetRequestStream();
             stream.Write(payload.ToByteArray(), 0, payload.ToByteArray().Length);
             stream.Close();
@@ -82,7 +82,7 @@ namespace NetRPC.Tests
                 CallId = Guid.NewGuid(),
                 SessionId = Guid.NewGuid(),
                 Method = method,
-                Version = "0.5",
+                Version = Constants.Version,
                 Parameters = parameters == null ? null : parameters.Select(p => serializer.SerializeToParameter(p)).ToArray()
             };
             return serializer.SerializeRequest(request);

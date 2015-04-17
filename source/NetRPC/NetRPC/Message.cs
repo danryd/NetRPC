@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace NetRPC
+﻿namespace NetRPC
 {
+    using System;
+    using System.Collections.Generic;
+
     public class Message
     {
         /// <summary>
-        /// 0.5
+        /// Current message version
         /// </summary>
         public string Version { get; set; }
         /// <summary>

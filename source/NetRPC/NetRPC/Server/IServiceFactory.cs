@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NetRPC.Binding
+namespace NetRPC.Server
 {
-    class DefaultBinding
+    public interface IServiceFactory
     {
+        object Create();
+        void Release(object o);
     }
 }

@@ -1,5 +1,4 @@
-﻿using NetRPC.Transport;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -7,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace NetRPC.Hosting
+namespace NetRPC.Server
 {
     public class HttpListenerHost : HostBase
     {
@@ -66,7 +65,7 @@ namespace NetRPC.Hosting
 
             var bytes = Encoding.UTF8.GetBytes(response);
             ctx.Response.ContentLength64 = bytes.Length;
-            ctx.Response.ContentType = "application/json";
+            ctx.Response.ContentType = Constants.ContentType;//should depend on serialization tech
             streamHandler.WriteToStream(bytes, ctx.Response.OutputStream);
 
             ctx.Response.Close();

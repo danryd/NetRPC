@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace NetRPC.Client
 {
-    class HttpTransport
+    class HttpTransport:IClientTransport
     {
         private Uri uri;
         private StreamHandler streamHandler = new StreamHandler();
@@ -21,7 +21,7 @@ namespace NetRPC.Client
         {
             var client = WebRequest.Create(uri);
             client.Method = "POST";
-            client.ContentType = "application/json";
+            client.ContentType = Constants.ContentType;//should be depeding on serialization tech.
             streamHandler.WriteToStream(request.ToByteArray(), client.GetRequestStream());
             var resp = client.GetResponse();
             return streamHandler.ReadToString(resp.GetResponseStream());

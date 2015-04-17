@@ -1,9 +1,8 @@
-﻿namespace NetRPC
+﻿namespace NetRPC.Server
 {
-    using NetRPC.Invocation;
-    using NetRPC.Hosting;
+    using NetRPC.Server;
+    using NetRPC.Server;
     using NetRPC.Serialization;
-    using NetRPC.Transport;
     using System;
     using System.IO;
     using System.Linq;
@@ -11,7 +10,6 @@
     {
         private readonly IServiceFactory serviceFactory;
         private Type contract;
-        //private StreamHandler streamHandler = new StreamHandler();
         private readonly ISerializer serializer;
         public Pipeline(Type contract, ISerializer serializer, IServiceFactory factory, IServiceInvoker invoker)
         {
@@ -45,7 +43,7 @@
             {
                 CallId = context.Request.CallId,
                 SessionId = context.Request.SessionId,
-                Version = "0.5",
+                Version = Constants.Version,
                 Method = context.Request.Method,
                 Error = context.Error
             };
@@ -55,8 +53,8 @@
         private void Serialize(NetRPCContext context)
         {
             context.Response.Result = serializer.SerializeToParameter(context.Result);
-            var json = serializer.SerializeResponse(context.Response);
-            context.ResponseString = json;
+            var serializedResponse = serializer.SerializeResponse(context.Response);
+            context.ResponseString = serializedResponse;
 
         }
 
