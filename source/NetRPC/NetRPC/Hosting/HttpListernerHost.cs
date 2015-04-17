@@ -93,14 +93,6 @@ namespace NetRPC.Hosting
                 listener.Close();
             }
         }
-        protected void OnMessageReceived(MessageReceivedEventArgs eventArgs)
-        {
-            if (MessageReceiveced != null)
-                MessageReceiveced(this, eventArgs);
-        }
-
-        public event EventHandler<MessageReceivedEventArgs> MessageReceiveced;
-
         public void Send(string message)
         {
             throw new NotImplementedException();

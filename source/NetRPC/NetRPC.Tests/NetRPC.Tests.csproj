@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DispatcherTests.cs" />
+    <Compile Include="Hosting\HostTests.cs" />
     <Compile Include="MessageHelper.cs" />
     <Compile Include="Hosting\ContainerTests.cs" />
     <Compile Include="Invocation\DefaultInvokerTests.cs" />

@@ -46,6 +46,7 @@
     <Compile Include="Binding\DefaultBinding.cs" />
     <Compile Include="Client\ClientBase.cs" />
     <Compile Include="Hosting\EndpointNotFoundException.cs" />
+    <Compile Include="Hosting\SelfHost.cs" />
     <Compile Include="Invocation\ServiceInvoker.cs" />
     <Compile Include="Invocation\IServiceInvoker.cs" />
     <Compile Include="Hosting\DelegateServiceFactory.cs" />
