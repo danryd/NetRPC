@@ -4,6 +4,7 @@ namespace NetRPC.Client
 {
     using NetRPC.Serialization;
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
     using System.Runtime.Remoting.Messaging;
@@ -18,18 +19,24 @@ namespace NetRPC.Client
     {
         private ActualProxy<T> actual;
         /// <summary>
-        /// 
+        ///  Uses default transport (HTTP) and default serializer (JSON)
         /// </summary>
         /// <param name="uri">Full uri to endpoint (ie. http://example.com/endpoint )</param>
         public Client(string uri)
-           {
-            // TODO: Complete member initialization
-            actual = new ActualProxy<T>(uri);
+            : this(new HttpTransport(uri))
+        {
+        }
+        public Client(IClientTransport transport) : this(transport, new JsonSerializer()) { }
+        public Client(IClientTransport transport, ISerializer serializer)
+        {
+            actual = new ActualProxy<T>(transport, serializer);
         }
         public T Proxy()
         {
             return (T)actual.GetTransparentProxy();
         }
+        public IDictionary<string, string> Headerdata { get { return actual.Headerdata; } }
+          
         /// <summary>
         /// Inner class to reduce external surface area.
         /// </summary>
@@ -38,28 +45,26 @@ namespace NetRPC.Client
         {
             private ISerializer serializer = new JsonSerializer();
             private IClientTransport transport;
-            private string uri;
-
-
-            public ActualProxy(string uri)
+            private Dictionary<string, string> headerData;
+            public ActualProxy(IClientTransport transport, ISerializer serializer)
                 : base(typeof(T))
             {
-                // TODO: Complete member initialization
-                this.uri = uri;
-                transport = new HttpTransport(uri);
+                this.serializer = serializer;
+                this.transport = transport;
+                this.headerData = new Dictionary<string, string>();
             }
             public override IMessage Invoke(IMessage msg)
             {
                 var mcm = msg as IMethodCallMessage;
                 if (mcm == null)
-                    throw new NetRPCException(600, "Proxy call was not of type IMethodCallMessage, instead type was: "+msg.GetType());
+                    throw new NetRPCException(600, "Proxy call was not of type IMethodCallMessage, instead type was: " + msg.GetType());
                 var request = CreateRequest(mcm);
                 var response = Process(request);
                 var result = Process(response, mcm);
                 var returnMessage = new ReturnMessage(result, null, 0, null, mcm);
                 return returnMessage;
             }
-
+            public IDictionary<string, string> Headerdata { get { return headerData; } }
             private object Process(Response response, IMethodCallMessage mcm)
             {
                 var returnType = ((MethodInfo)mcm.MethodBase).ReturnType;
@@ -88,7 +93,7 @@ namespace NetRPC.Client
                 request.Parameters = (msg.InArgs).Select(p => serializer.SerializeToParameter(p)).ToArray();
                 return request;
             }
-           
+
 
         }
     }

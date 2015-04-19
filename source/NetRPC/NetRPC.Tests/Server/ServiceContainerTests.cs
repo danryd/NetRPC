@@ -1,4 +1,4 @@
-﻿namespace NetRPC.Tests
+﻿namespace NetRPC.Tests.Server
 {
     using NetRPC.Server;
     using Should;
@@ -14,10 +14,7 @@
         }
         public void ContainerThrowsExceptionIfEndpointNotFound()
         {
-           
-                Assert.Throws<EndpointNotFoundException>(()=>container.Handle("notregisterd", ""));
-           
-
+            Assert.Throws<EndpointNotFoundException>(() => container.Handle("notregistered", ""));
         }
 
     }

@@ -33,6 +33,9 @@
     <Reference Include="Fixie">
       <HintPath>..\packages\Fixie.1.0.0.15\lib\net45\Fixie.dll</HintPath>
     </Reference>
+    <Reference Include="NSubstitute">
+      <HintPath>..\packages\NSubstitute.1.8.1.0\lib\net45\NSubstitute.dll</HintPath>
+    </Reference>
     <Reference Include="Should">
       <HintPath>..\packages\Should.1.1.20\lib\Should.dll</HintPath>
     </Reference>
@@ -46,16 +49,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Client\ClientProxyingTests.cs" />
-    <Compile Include="DispatcherTests.cs" />
+    <Compile Include="HeaderDataTests.cs" />
     <Compile Include="MessageHelper.cs" />
-    <Compile Include="Hosting\ContainerTests.cs" />
-    <Compile Include="Invocation\DefaultInvokerTests.cs" />
-    <Compile Include="HappyPathServerTests.cs" />
+    <Compile Include="Server\DefaultInvokerTests.cs" />
+    <Compile Include="HappyPathTests.cs" />
     <Compile Include="ITest.cs" />
-    <Compile Include="PipelineTests.cs" />
+    <Compile Include="MultiClientTests.cs" />
+    <Compile Include="Server\PipelineTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Serialization\JsonDeserializationTests.cs" />
-    <Compile Include="ServiceContainerTests.cs" />
+    <Compile Include="Server\ServiceContainerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

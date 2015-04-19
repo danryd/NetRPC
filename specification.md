@@ -62,3 +62,15 @@ Series 	Category
 200		Service lookup/validation
 300		Service activation/invocation
 600		ClientSideErrors
+## 6. Contract requirements
+The only real constraint is no overload of actions. Ie. 
+    inteface ISomething{
+	    void Do(int id);
+	    void Do(int id, string someData);
+    }
+is not valid. 
+    interface ISomething{
+        void Do(int id);
+        void DoSomething(int id, string someData);
+    }
+Would be an acceptable alternative.

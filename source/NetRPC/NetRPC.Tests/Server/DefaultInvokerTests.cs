@@ -1,4 +1,4 @@
-﻿namespace NetRPC.Tests.Dispatching
+﻿namespace NetRPC.Tests.Server
 {
     using NetRPC.Server;
     using Should;
@@ -51,6 +51,12 @@
             public string StringNoParam()
             {
                 return "assert";
+            }
+
+
+            public string Echo(string str)
+            {
+                throw new NotImplementedException();
             }
         }
 

@@ -12,6 +12,7 @@ namespace NetRPC.Server
     {
         private HttpListener listener;
         private Thread workerThread;
+        private Task workerTask;
         private bool isOpen;
         private Uri uri;
         private StreamHandler streamHandler = new StreamHandler();
@@ -34,29 +35,38 @@ namespace NetRPC.Server
 
             listener.Start();
             isOpen = true;
-            workerThread = new Thread(new ParameterizedThreadStart(Listen));
-            workerThread.Start();
+            workerTask = Task.Run(async () => await Listen());
+            //workerThread = new Thread(new ParameterizedThreadStart(Listen));
+            //workerThread.Start();
         }
-        private async void Listen(object o)
+        private async Task Listen()
         {
             while (isOpen)
             {
-                var ctx = await listener.GetContextAsync();
-                if (ctx.Request.HttpMethod != "POST")
+                await listener.GetContextAsync().ContinueWith(async t =>
                 {
-                    ReturnErrorResponse(ctx, "POST is the only verb that is understood");
-                }
-                try
-                {
-                    var endpointUri = uri.MakeRelativeUri(ctx.Request.Url).ToString();
-                    var message = streamHandler.ReadToString(ctx.Request.InputStream);
-                    var response = await Process(endpointUri, message);
-                    Reply(ctx, response);
-                }
-                catch (Exception ex)//Must catch all to return error
-                {
-                    ReturnErrorResponse(ctx, ex.Message);
-                }
+                    var ctx = await t;
+                    if (ctx.Request.HttpMethod != "POST")
+                    {
+                        ReturnErrorResponse(ctx, "POST is the only verb that is understood");
+                    }
+                    try
+                    {
+                        await Task.Run(() =>
+                        {
+                            var endpointUri = uri.MakeRelativeUri(ctx.Request.Url).ToString();
+                            var message = streamHandler.ReadToString(ctx.Request.InputStream);
+                            var response = ProcessMessage(endpointUri, message);
+                            Reply(ctx, response);
+
+                        });
+                    }
+                    catch (Exception ex)//Must catch all to return error
+                    {
+                        ReturnErrorResponse(ctx, ex.Message);
+                    }
+                });
+
             }
         }
 
@@ -89,9 +99,10 @@ namespace NetRPC.Server
             if (isDisposing)
             {
                 isOpen = false;
+
                 listener.Close();
             }
         }
-        
+
     }
 }

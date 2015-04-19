@@ -1,17 +1,24 @@
 ﻿namespace NetRPC.Tests.Client
 {
     using NetRPC.Client;
+    using NetRPC.Serialization;
+    using NSubstitute;
     using Should;
     public class ClientProxyingTests
     {
+        private ISerializer serializer = new JsonSerializer();
+       
 
-        protected void CanCreateClientOfT()
-        {
-            var client = new Client<ProxyThis>("null");
-           // var str = client.Proxy().Method("what");
-            //str.ShouldEqual(4);
+        public void CanSendMessage() {
+            IClientTransport trsp = Substitute.For<IClientTransport>();
+           
+            trsp.Request(Arg.Any<string>()).Returns(MessageHelper.GenerateJsonResponse("Method",4));
+            var proxy = new Client<ProxyThis>(trsp);
+            var result = proxy.Proxy().Method("asd");
+            result.ShouldEqual(4);
         }
     }
+
 
     public interface ProxyThis
     {

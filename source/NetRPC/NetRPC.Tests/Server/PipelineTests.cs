@@ -1,4 +1,4 @@
-﻿namespace NetRPC.Tests
+﻿namespace NetRPC.Tests.Server
 {
     using NetRPC.Server;
     using NetRPC.Server;

@@ -1,10 +1,7 @@
 ﻿namespace NetRPC.Server
 {
-    using NetRPC.Server;
-    using NetRPC.Server;
     using NetRPC.Serialization;
     using System;
-    using System.IO;
     using System.Linq;
     public class Pipeline
     {
@@ -20,38 +17,42 @@
         }
         public string Handle(string request)
         {
-            var context = CreateContext(request);
-            Deserialize(context);
-            Dispatch(context);
-            CreateResponse(context);
-            Serialize(context);
-            return context.ResponseString;
+            try
+            {
+                var context = CreateContext(request);
+                Deserialize(context);
+                Dispatch(context);
+                Serialize(context);
+                DestroyContext(context);
+                return context.ResponseString;
+            }
+            finally
+            {
 
+            }
+
+
+        }
+
+        private void DestroyContext(NetRPCContext context)
+        {
+            OperationContextManager.CurrentContext = null;
         }
 
         private static NetRPCContext CreateContext(string request)
         {
             var context = new NetRPCContext();
+            OperationContextManager.CurrentContext = context;
             context.RequestString = request;
             return context;
         }
 
 
-        private void CreateResponse(NetRPCContext context)
-        {
-            context.Response = new Response
-            {
-                CallId = context.Request.CallId,
-                SessionId = context.Request.SessionId,
-                Version = Constants.Version,
-                Method = context.Request.Method,
-                Error = context.Error
-            };
-
-        }
+        
 
         private void Serialize(NetRPCContext context)
         {
+            context.Response.Error = context.Error;
             context.Response.Result = serializer.SerializeToParameter(context.Result);
             var serializedResponse = serializer.SerializeResponse(context.Response);
             context.ResponseString = serializedResponse;
@@ -85,6 +86,7 @@
             {
                 context.Request = serializer.DeserializeRequest(context.RequestString);
                 context.Parameters = DeserializeParameters(context);
+                InitializeResponse(context);
             }
             catch (Exception ex)
             {
@@ -92,6 +94,17 @@
 
             }
 
+        }
+
+        private void InitializeResponse(NetRPCContext context)
+        {
+            context.Response = new Response
+            {
+                CallId = context.Request.CallId,
+                SessionId = context.Request.SessionId,
+                Version = Constants.Version,
+                Method = context.Request.Method,
+            };
         }
 
         private object[] DeserializeParameters(NetRPCContext context)

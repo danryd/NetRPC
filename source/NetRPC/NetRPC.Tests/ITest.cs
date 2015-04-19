@@ -11,6 +11,7 @@ namespace NetRPC.Tests
         void VoidNoParam();
         void VoidStringParam(string str);
         string StringNoParam();
+        string Echo(string str);
     }
 
 

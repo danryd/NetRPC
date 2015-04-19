@@ -47,6 +47,7 @@
     <Compile Include="Client\IClientTransport.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Server\EndpointNotFoundException.cs" />
+    <Compile Include="Server\OperationContext.cs" />
     <Compile Include="Server\ServiceInvoker.cs" />
     <Compile Include="Server\IServiceInvoker.cs" />
     <Compile Include="Server\DelegateServiceFactory.cs" />

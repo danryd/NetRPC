@@ -10,12 +10,12 @@ namespace NetRPC.Tests
     using NetRPC.Serialization;
     using Should;
     using NetRPC.Client;
-    public class HappyPathServerTests
+    public class HappyPathTests
     {
         private string happyPathURI = "http://localhost:{0}/";
         private ISerializer serializer = new JsonSerializer();
         private static int port = 9000;
-        public HappyPathServerTests()
+        public HappyPathTests()
         {
             port++;
         }
