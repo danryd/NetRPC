@@ -36,7 +36,7 @@ namespace NetRPC.Tests
         {
 
             var container = new ServiceContainer();
-            var factory = new DelegateServiceFactory(() => { return new HappyPathService(); }, _ => { return; });
+            var factory = new DelegateServiceFactory(c => { return new HappyPathService(); }, _ => { return; });
             container.AddEndpoint(new Endpoint("Happy", typeof(IHappyPath), factory));
 
             using (var host = new HttpListenerHost(string.Format(happyPathURI, port), container))
@@ -51,7 +51,7 @@ namespace NetRPC.Tests
         private string TestMethod(string payload)
         {
             var container = new ServiceContainer();
-            var factory = new DelegateServiceFactory(() => { return new HappyPathService(); }, _ => { return; });
+            var factory = new DelegateServiceFactory(c => { return new HappyPathService(); }, _ => { return; });
             container.AddEndpoint(new Endpoint("Happy", typeof(IHappyPath), factory));
 
             using (var host = new HttpListenerHost(string.Format(happyPathURI,port), container))

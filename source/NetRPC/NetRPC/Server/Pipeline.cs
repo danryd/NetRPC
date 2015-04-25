@@ -2,6 +2,7 @@
 {
     using NetRPC.Serialization;
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     public class Pipeline
     {
@@ -23,7 +24,6 @@
                 Deserialize(context);
                 Dispatch(context);
                 Serialize(context);
-                DestroyContext(context);
                 return context.ResponseString;
             }
             finally
@@ -34,15 +34,11 @@
 
         }
 
-        private void DestroyContext(NetRPCContext context)
-        {
-            OperationContextManager.CurrentContext = null;
-        }
+      
 
         private static NetRPCContext CreateContext(string request)
         {
             var context = new NetRPCContext();
-            OperationContextManager.CurrentContext = context;
             context.RequestString = request;
             return context;
         }
@@ -63,7 +59,7 @@
         private void Dispatch(NetRPCContext context)
         {
 
-            var serviceInstance = serviceFactory.Create();
+            var serviceInstance = serviceFactory.Create(new OperationContext(context));
             try
             {
                 var result = invoker.Dispatch(contract, context.Request.Method, serviceInstance, context.Parameters);
@@ -104,6 +100,7 @@
                 SessionId = context.Request.SessionId,
                 Version = Constants.Version,
                 Method = context.Request.Method,
+                Headers = new Dictionary<string,string>()
             };
         }
 

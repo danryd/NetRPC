@@ -11,7 +11,7 @@
         public PipelineTests()
         {
             pipetest = new PipeTest();
-            pipeline = new Pipeline(typeof(IPipeTest),new JsonSerializer(), new DelegateServiceFactory(() => pipetest, _ => { }), new DefaultInvoker());
+            pipeline = new Pipeline(typeof(IPipeTest),new JsonSerializer(), new DelegateServiceFactory(c => pipetest, _ => { }), new DefaultInvoker());
 
         }
         public void PipeCallsService()

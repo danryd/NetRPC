@@ -28,9 +28,12 @@
         /// </summary>
         public Dictionary<string, string> Headers { get; set; }
 
+
     }
     public class Request : Message
     {
+
+       
         /// <summary>
         /// OPTIONAL
         /// Parameters to method. Requires correct ordering
@@ -48,6 +51,7 @@
         /// If error occures the error property will be set, otherwise it must be null
         /// </summary>
         public Error Error { get; set; }
+
     }
     public class Error
     {

@@ -18,7 +18,7 @@ namespace NetRPC.Tests
             string uri = "http://localhost:18080/";
             var threads = new Thread[threadCount];
             var container = new ServiceContainer();
-            container.AddEndpoint(new Endpoint("Test", typeof(ITest), new DelegateServiceFactory(() => new MultiClientTest(), _ => { })));
+            container.AddEndpoint(new Endpoint("Test", typeof(ITest), new DelegateServiceFactory(c => new MultiClientTest(), _ => { })));
             using (var server = new HttpListenerHost(uri,container)) {
                 for (int i = 0; i < threadCount; i++) {
                     var inner = i;

@@ -8,7 +8,7 @@ namespace NetRPC.Server
 {
     public interface IServiceFactory
     {
-        object Create();
+        object Create(OperationContext operationContext);
         void Release(object o);
     }
 }

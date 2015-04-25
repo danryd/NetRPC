@@ -35,8 +35,9 @@ namespace NetRPC.Client
         {
             return (T)actual.GetTransparentProxy();
         }
-        public IDictionary<string, string> Headerdata { get { return actual.Headerdata; } }
-          
+        public IDictionary<string, string> RequestHeaderdata { get { return actual.RequestHeaderdata; } }
+        public IDictionary<string, string> ResponseHeaderdata { get { return actual.ResponseHeaderdata; } }
+    
         /// <summary>
         /// Inner class to reduce external surface area.
         /// </summary>
@@ -45,13 +46,17 @@ namespace NetRPC.Client
         {
             private ISerializer serializer = new JsonSerializer();
             private IClientTransport transport;
-            private Dictionary<string, string> headerData;
+            private Dictionary<string, string> requestHeaderData;
+            private Dictionary<string, string> responseHeaderData;
+          
             public ActualProxy(IClientTransport transport, ISerializer serializer)
                 : base(typeof(T))
             {
                 this.serializer = serializer;
                 this.transport = transport;
-                this.headerData = new Dictionary<string, string>();
+                this.requestHeaderData = new Dictionary<string, string>();
+                this.responseHeaderData = new Dictionary<string, string>();
+            
             }
             public override IMessage Invoke(IMessage msg)
             {
@@ -64,13 +69,18 @@ namespace NetRPC.Client
                 var returnMessage = new ReturnMessage(result, null, 0, null, mcm);
                 return returnMessage;
             }
-            public IDictionary<string, string> Headerdata { get { return headerData; } }
+            public IDictionary<string, string> RequestHeaderdata { get { return requestHeaderData; } }
+            public IDictionary<string, string> ResponseHeaderdata { get { return responseHeaderData; } }
+          
             private object Process(Response response, IMethodCallMessage mcm)
             {
                 var returnType = ((MethodInfo)mcm.MethodBase).ReturnType;
+                responseHeaderData = response.Headers;
                 if (response.Result != null && returnType != typeof(void))
                 {
+                  
                     var result = serializer.DeserializeParameter(response.Result);
+                   
                     return Convert.ChangeType(result, returnType);
                 }
                 return null;
@@ -91,6 +101,7 @@ namespace NetRPC.Client
                 request.CallId = Guid.NewGuid();
                 request.Version = Constants.Version;
                 request.Parameters = (msg.InArgs).Select(p => serializer.SerializeToParameter(p)).ToArray();
+                request.Headers = requestHeaderData;
                 return request;
             }
 

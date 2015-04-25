@@ -10,30 +10,50 @@
         {
 
             string uri = "http://localhost:18081/";
-            var service = new HeaderdataTestService();
             var container = new ServiceContainer();
-            container.AddEndpoint(new Endpoint("Test", typeof(ITest), new DelegateServiceFactory(() => service, _ => { })));
+            container.AddEndpoint(new Endpoint("Test", typeof(ITest), new DelegateServiceFactory(c => new HeaderdataTestService(c), service => { })));
             using (var server = new HttpListenerHost(uri, container))
             {
-                var proxy = new Client<ITest>(uri+"Test");
-                proxy.Headerdata.Add("akey", "avalue");
+                var proxy = new Client<ITest>(uri + "Test");
+                proxy.RequestHeaderdata.Add("akey", "avalue");
                 proxy.Proxy().VoidNoParam();
-                service.AValue.ShouldEqual("avalue");
+                //service.AValue.ShouldEqual("avalue");
+            }
+        }
+        public void CanAttachHeaderdataToReply()
+        {
+
+            string uri = "http://localhost:18082/";
+            var container = new ServiceContainer();
+            container.AddEndpoint(new Endpoint("Test", typeof(ITest), new DelegateServiceFactory(c => new HeaderdataTestService(c), service => {  })));
+            using (var server = new HttpListenerHost(uri, container))
+            {
+                var proxy = new Client<ITest>(uri + "Test");
+                proxy.Proxy().VoidStringParam("avalue");
+                var response = proxy.ResponseHeaderdata["akey"];
+                response.ShouldEqual("avalue");
             }
         }
     }
 
     public class HeaderdataTestService : ITest
     {
+        private OperationContext ctx;
+        public HeaderdataTestService(OperationContext ctx)
+        {
+            this.ctx = ctx;
+        }
         public string AValue { get; set; }
         public void VoidNoParam()
         {
-            AValue = OperationContext.Current.IncomingHeaderdata["akey"];
+
+            AValue = ctx.IncomingHeaderdata["akey"];
+            AValue.ShouldEqual("avalue");
         }
 
         public void VoidStringParam(string str)
         {
-            throw new NotImplementedException();
+             ctx.OutgoingHeaderdata.Add("akey", str);
         }
 
         public string StringNoParam()
