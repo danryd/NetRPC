@@ -48,6 +48,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\NetRPC.SelfHost\NetRPC.SelfHost.csproj">
+      <Project>{52def466-022d-4d4a-808d-d5f8a6a1edbf}</Project>
+      <Name>NetRPC.SelfHost</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\NetRPC\NetRPC.csproj">
       <Project>{2d82f477-02e6-480f-9de2-e1922cc18dd4}</Project>
       <Name>NetRPC</Name>

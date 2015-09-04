@@ -34,8 +34,6 @@
 
         }
 
-      
-
         private static NetRPCContext CreateContext(string request)
         {
             var context = new NetRPCContext();
@@ -44,7 +42,7 @@
         }
 
 
-        
+
 
         private void Serialize(NetRPCContext context)
         {
@@ -100,7 +98,7 @@
                 SessionId = context.Request.SessionId,
                 Version = Constants.Version,
                 Method = context.Request.Method,
-                Headers = new Dictionary<string,string>()
+                Headers = new Dictionary<string, string>()
             };
         }
 
@@ -114,5 +112,22 @@
 
     }
 
+    public interface IHandler
+    {
+        void Handle(NetRPCContext context);
+    }
+    public class SerializationHandler : IHandler
+    {
+        private IHandler next;
+        public SerializationHandler(IHandler next)
+        {
+            this.next = next;
+        }
 
+        public void Handle(NetRPCContext context)
+        {
+
+            next.Handle(context);
+        }
+    }
 }

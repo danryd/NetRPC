@@ -4,6 +4,7 @@
     using NetRPC.Server;
     using System;
     using Should;
+    using NetRPC.SelfHost;
     public class HeaderDataTests
     {
         public void CanAttachHeaderdataToServer()
@@ -12,7 +13,7 @@
             string uri = "http://localhost:18081/";
             var container = new ServiceContainer();
             container.AddEndpoint(new Endpoint("Test", typeof(ITest), new DelegateServiceFactory(c => new HeaderdataTestService(c), service => { })));
-            using (var server = new HttpListenerHost(uri, container))
+            using (var server = new Host(uri, container))
             {
                 var proxy = new Client<ITest>(uri + "Test");
                 proxy.RequestHeaderdata.Add("akey", "avalue");
@@ -26,7 +27,7 @@
             string uri = "http://localhost:18082/";
             var container = new ServiceContainer();
             container.AddEndpoint(new Endpoint("Test", typeof(ITest), new DelegateServiceFactory(c => new HeaderdataTestService(c), service => {  })));
-            using (var server = new HttpListenerHost(uri, container))
+            using (var server = new Host(uri, container))
             {
                 var proxy = new Client<ITest>(uri + "Test");
                 proxy.Proxy().VoidStringParam("avalue");

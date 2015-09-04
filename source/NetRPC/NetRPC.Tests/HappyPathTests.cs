@@ -10,6 +10,7 @@ namespace NetRPC.Tests
     using NetRPC.Serialization;
     using Should;
     using NetRPC.Client;
+    using NetRPC.SelfHost;
     public class HappyPathTests
     {
         private string happyPathURI = "http://localhost:{0}/";
@@ -39,7 +40,7 @@ namespace NetRPC.Tests
             var factory = new DelegateServiceFactory(c => { return new HappyPathService(); }, _ => { return; });
             container.AddEndpoint(new Endpoint("Happy", typeof(IHappyPath), factory));
 
-            using (var host = new HttpListenerHost(string.Format(happyPathURI, port), container))
+            using (var host = new Host(string.Format(happyPathURI, port), container))
             {
                 var client = new Client<IHappyPath>(string.Format(happyPathURI, port) + "Happy");
                 var result = client.Proxy().Complex(new Complex { Data = "hej", Value = 6004 });
@@ -54,7 +55,7 @@ namespace NetRPC.Tests
             var factory = new DelegateServiceFactory(c => { return new HappyPathService(); }, _ => { return; });
             container.AddEndpoint(new Endpoint("Happy", typeof(IHappyPath), factory));
 
-            using (var host = new HttpListenerHost(string.Format(happyPathURI,port), container))
+            using (var host = new Host(string.Format(happyPathURI,port), container))
             {
                 return Execute(payload);
             }

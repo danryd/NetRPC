@@ -1,14 +1,11 @@
-﻿using NetRPC.Client;
-using NetRPC.Server;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-
+﻿
 namespace NetRPC.Tests
 {
+    using NetRPC.Client;
+    using NetRPC.Server;
+    using System;
+    using System.Threading;
+    using NetRPC.SelfHost;
     public class MultiClientTests
     {
         
@@ -19,7 +16,7 @@ namespace NetRPC.Tests
             var threads = new Thread[threadCount];
             var container = new ServiceContainer();
             container.AddEndpoint(new Endpoint("Test", typeof(ITest), new DelegateServiceFactory(c => new MultiClientTest(), _ => { })));
-            using (var server = new HttpListenerHost(uri,container)) {
+            using (var server = new Host(uri,container)) {
                 for (int i = 0; i < threadCount; i++) {
                     var inner = i;
                     threads[i] = new Thread(() =>

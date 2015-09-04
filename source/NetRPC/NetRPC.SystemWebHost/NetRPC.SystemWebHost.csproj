@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{59BA2DF7-1A9C-4654-9A5E-CD5F36D4FA8E}</ProjectGuid>
+    <ProjectGuid>{836A7167-7695-4B0C-BCED-73302C9D5C09}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NetRPC.Tests</RootNamespace>
-    <AssemblyName>NetRPC.Tests</AssemblyName>
+    <RootNamespace>NetRPC.SystemWebHost</RootNamespace>
+    <AssemblyName>NetRPC.SystemWebHost</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -21,7 +21,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -30,20 +29,11 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Fixie">
-      <HintPath>..\packages\Fixie.1.0.0.15\lib\net45\Fixie.dll</HintPath>
-    </Reference>
-    <Reference Include="NSubstitute">
-      <HintPath>..\packages\NSubstitute.1.8.1.0\lib\net45\NSubstitute.dll</HintPath>
-    </Reference>
-    <Reference Include="Should">
-      <HintPath>..\packages\Should.1.1.20\lib\Should.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -51,33 +41,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Client\ClientProxyingTests.cs" />
-    <Compile Include="HeaderDataTests.cs" />
-    <Compile Include="MessageHelper.cs" />
-    <Compile Include="Server\DefaultInvokerTests.cs" />
-    <Compile Include="HappyPathTests.cs" />
-    <Compile Include="ITest.cs" />
-    <Compile Include="MultiClientTests.cs" />
-    <Compile Include="Server\PipelineTests.cs" />
+    <Compile Include="Host.cs" />
+    <Compile Include="NetRPCHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Serialization\JsonDeserializationTests.cs" />
-    <Compile Include="Server\ServiceContainerTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\NetRPC.SelfHost\NetRPC.SelfHost.csproj">
-      <Project>{52def466-022d-4d4a-808d-d5f8a6a1edbf}</Project>
-      <Name>NetRPC.SelfHost</Name>
-    </ProjectReference>
     <ProjectReference Include="..\NetRPC\NetRPC.csproj">
       <Project>{2d82f477-02e6-480f-9de2-e1922cc18dd4}</Project>
       <Name>NetRPC</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
