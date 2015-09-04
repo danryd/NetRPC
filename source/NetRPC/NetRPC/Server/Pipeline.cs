@@ -48,7 +48,7 @@
         {
             context.Response.Error = context.Error;
             context.Response.Result = serializer.SerializeToParameter(context.Result);
-            var serializedResponse = serializer.SerializeResponse(context.Response);
+            var serializedResponse = serializer.Serialize(context.Response);
             context.ResponseString = serializedResponse;
 
         }
@@ -78,7 +78,7 @@
         {
             try
             {
-                context.Request = serializer.DeserializeRequest(context.RequestString);
+                context.Request = serializer.Deserialize(context.RequestString);
                 context.Parameters = DeserializeParameters(context);
                 InitializeResponse(context);
             }
@@ -92,7 +92,7 @@
 
         private void InitializeResponse(NetRPCContext context)
         {
-            context.Response = new Response
+            context.Response = new Message
             {
                 CallId = context.Request.CallId,
                 SessionId = context.Request.SessionId,

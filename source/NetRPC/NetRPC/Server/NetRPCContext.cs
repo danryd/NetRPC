@@ -11,11 +11,11 @@ namespace NetRPC.Server
     {
         public string RequestString { get; set; }
         public string ResponseString { get; set; }
-        public Request Request { get; set; }
-        public Response Response { get; set; }
+        public Message Request { get; set; }
+        public Message Response { get; set; }
         public object Result { get; set; }
         public Error Error { get; set; }
-
         public object[] Parameters { get; set; }
+        public bool RequestCompleted { get; set; }
     }
 }

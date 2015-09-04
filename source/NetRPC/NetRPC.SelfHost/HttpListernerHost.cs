@@ -11,8 +11,7 @@ namespace NetRPC.SelfHost
 {
     public class Host : HostBase
     {
-        private HttpListener listener;
-        private Thread workerThread;
+        private readonly HttpListener listener;
         private Task workerTask;
         private bool isOpen;
         private Uri uri;
@@ -37,9 +36,7 @@ namespace NetRPC.SelfHost
             listener.Start();
             isOpen = true;
             workerTask = Task.Run(async () => await Listen());
-            //workerThread = new Thread(new ParameterizedThreadStart(Listen));
-            //workerThread.Start();
-        }
+          }
         private async Task Listen()
         {
             while (isOpen)
@@ -95,7 +92,7 @@ namespace NetRPC.SelfHost
             ctx.Response.Close();
         }
 
-        public void Dispose(bool isDisposing)
+        protected override void Dispose(bool isDisposing)
         {
             if (isDisposing)
             {

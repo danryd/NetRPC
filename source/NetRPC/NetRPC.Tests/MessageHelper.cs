@@ -14,10 +14,10 @@ namespace NetRPC.Tests
         {
             return serializer.SerializeToParameter(o);
         }
-        public static Request GenerateRequest(string method, object[] parameters = null, Dictionary<string, string> headers = null)
+        public static Message GenerateRequest(string method, object[] parameters = null, Dictionary<string, string> headers = null)
         {
             var requestParameters = parameters == null ? null : parameters.Select(p => ToParameter(p)).ToArray();
-            var request = new Request
+            var request = new Message
            {
                CallId = Guid.NewGuid(),
                SessionId = Guid.NewGuid(),
@@ -31,18 +31,18 @@ namespace NetRPC.Tests
         public static string GenerateJsonRequest(string method, object[] parameters = null, Dictionary<string, string> headers = null)
         {
             var request = GenerateRequest(method, parameters, headers);
-            return serializer.SerializeRequest(request);
+            return serializer.Serialize(request);
 
         }
 
         public static string GenerateJsonResponse(string method, object parameter = null, Dictionary<string, string> headers = null, Error error = null)
         {
-            return serializer.SerializeResponse(GenerateResponse(method, parameter, headers, error));
+            return serializer.Serialize(GenerateResponse(method, parameter, headers, error));
         }
-        public static Response GenerateResponse(string method, object parameter = null, Dictionary<string, string> headers = null, Error error = null)
+        public static Message GenerateResponse(string method, object parameter = null, Dictionary<string, string> headers = null, Error error = null)
         {
             var responseParameter = parameter == null ? null : ToParameter(parameter);
-            var response = new Response
+            var response = new Message
             {
                 CallId = Guid.NewGuid(),
                 SessionId = Guid.NewGuid(),

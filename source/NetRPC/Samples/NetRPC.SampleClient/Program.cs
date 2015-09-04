@@ -15,15 +15,14 @@ namespace NetRPC.SampleClient
         static void Main(string[] args)
         {
            
-            var callvoid = new Request
-            {
+            var callvoid = new Message { 
                 CallId = Guid.NewGuid(),
                 SessionId = Guid.NewGuid(),
                 Method = "CallVoid",
                 Version = Constants.Version
             };
 
-            Call(serializer.SerializeRequest(callvoid));
+            Call(serializer.Serialize(callvoid));
 
 
 

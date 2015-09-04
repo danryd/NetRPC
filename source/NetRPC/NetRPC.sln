@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetRPC", "NetRPC\NetRPC.csproj", "{2D82F477-02E6-480F-9DE2-E1922CC18DD4}"
 EndProject
@@ -15,9 +15,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetRPC.SampleHttpListernerS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetRPC.SelfHost", "NetRPC.SelfHost\NetRPC.SelfHost.csproj", "{52DEF466-022D-4D4A-808D-D5F8A6A1EDBF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetRPC.SystemWebHost", "NetRPC.SystemWebHost\NetRPC.SystemWebHost.csproj", "{836A7167-7695-4B0C-BCED-73302C9D5C09}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetRPC.OwinSample", "NetRPC.OwinSample\NetRPC.OwinSample.csproj", "{CAD28E3F-12B4-4E96-B007-D6FFE051FE27}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetRPC.SampleWebHost", "NetRPC.SampleWebHost\NetRPC.SampleWebHost.csproj", "{2FBD50A5-33C3-40F1-AECE-DE7CF15CA7B5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetRPC.OwinHost", "NetRPC.OwinHost\NetRPC.OwinHost.csproj", "{8790FE9B-B226-4F99-AB04-5F71885063F5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,14 +45,14 @@ Global
 		{52DEF466-022D-4D4A-808D-D5F8A6A1EDBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52DEF466-022D-4D4A-808D-D5F8A6A1EDBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52DEF466-022D-4D4A-808D-D5F8A6A1EDBF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{836A7167-7695-4B0C-BCED-73302C9D5C09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{836A7167-7695-4B0C-BCED-73302C9D5C09}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{836A7167-7695-4B0C-BCED-73302C9D5C09}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{836A7167-7695-4B0C-BCED-73302C9D5C09}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2FBD50A5-33C3-40F1-AECE-DE7CF15CA7B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2FBD50A5-33C3-40F1-AECE-DE7CF15CA7B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2FBD50A5-33C3-40F1-AECE-DE7CF15CA7B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2FBD50A5-33C3-40F1-AECE-DE7CF15CA7B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAD28E3F-12B4-4E96-B007-D6FFE051FE27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAD28E3F-12B4-4E96-B007-D6FFE051FE27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAD28E3F-12B4-4E96-B007-D6FFE051FE27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAD28E3F-12B4-4E96-B007-D6FFE051FE27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8790FE9B-B226-4F99-AB04-5F71885063F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8790FE9B-B226-4F99-AB04-5F71885063F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8790FE9B-B226-4F99-AB04-5F71885063F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8790FE9B-B226-4F99-AB04-5F71885063F5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,6 +60,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{D6258601-4F1F-418A-AA4C-401BEDEB62E6} = {9F2C8227-8925-42C2-966F-C06A96059EE4}
 		{9A6C42ED-FC02-4B54-B66E-6D443361906A} = {9F2C8227-8925-42C2-966F-C06A96059EE4}
-		{2FBD50A5-33C3-40F1-AECE-DE7CF15CA7B5} = {9F2C8227-8925-42C2-966F-C06A96059EE4}
+		{CAD28E3F-12B4-4E96-B007-D6FFE051FE27} = {9F2C8227-8925-42C2-966F-C06A96059EE4}
 	EndGlobalSection
 EndGlobal

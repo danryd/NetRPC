@@ -17,15 +17,15 @@ namespace NetRPC.Serialization
                     UseFastGuid = false
                 };
         }
-        public Request DeserializeRequest(string request)
+        public Message Deserialize(string request)
         {
             
-            return fastJSON.JSON.ToObject<Request>(request);
+            return fastJSON.JSON.ToObject<Message>(request);
         }
 
-        public Response DeserializeResponse(string request)
+        public Message DeserializeResponse(string request)
         {
-            return fastJSON.JSON.ToObject<Response>(request);
+            return fastJSON.JSON.ToObject<Message>(request);
         }
 
         public object DeserializeParameter(Parameter parameter)
@@ -44,12 +44,12 @@ namespace NetRPC.Serialization
             return para;
         }
 
-        public string SerializeRequest(Request request)
+        public string SerializeRequest(Message request)
         {
             return fastJSON.JSON.ToJSON(request);
         }
 
-        public string SerializeResponse(Response response)
+        public string Serialize(Message response)
         {
             var json = fastJSON.JSON.ToJSON(response);
             return json;

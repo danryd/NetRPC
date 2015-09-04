@@ -29,20 +29,13 @@
         public Dictionary<string, string> Headers { get; set; }
 
 
-    }
-    public class Request : Message
-    {
-
-       
         /// <summary>
         /// OPTIONAL
         /// Parameters to method. Requires correct ordering
         /// Empty or null if method has no parameters
         /// </summary>
-        public Parameter[] Parameters;
-    }
-    public class Response : Message
-    {
+        public Parameter[] Parameters { get; set; }
+
         /// <summary>
         /// The output of the service
         /// </summary>
@@ -53,6 +46,29 @@
         public Error Error { get; set; }
 
     }
+    //public class Request : Message
+    //{
+
+       
+    //    /// <summary>
+    //    /// OPTIONAL
+    //    /// Parameters to method. Requires correct ordering
+    //    /// Empty or null if method has no parameters
+    //    /// </summary>
+    //    public Parameter[] Parameters;
+    //}
+    //public class Response : Message
+    //{
+    //    /// <summary>
+    //    /// The output of the service
+    //    /// </summary>
+    //    public Parameter Result { get; set; }
+    //    /// <summary>
+    //    /// If error occures the error property will be set, otherwise it must be null
+    //    /// </summary>
+    //    public Error Error { get; set; }
+
+    //}
     public class Error
     {
         public int Code { get; set; }

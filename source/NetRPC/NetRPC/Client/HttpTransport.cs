@@ -10,7 +10,7 @@ namespace NetRPC.Client
     class HttpTransport:IClientTransport
     {
         private Uri uri;
-        private StreamHandler streamHandler = new StreamHandler();
+        private readonly StreamHandler streamHandler = new StreamHandler();
         public HttpTransport(string uri)
         {
             this.uri = new Uri(uri);

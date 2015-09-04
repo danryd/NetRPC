@@ -17,7 +17,7 @@ namespace NetRPC.Client
     /// <typeparam name="T">Service interface</typeparam>
     public class Client<T>
     {
-        private ActualProxy<T> actual;
+        private readonly ActualProxy<T> actual;
         /// <summary>
         ///  Uses default transport (HTTP) and default serializer (JSON)
         /// </summary>
@@ -42,7 +42,7 @@ namespace NetRPC.Client
         /// Inner class to reduce external surface area.
         /// </summary>
         /// <typeparam name="T">Service interface</typeparam>
-        private class ActualProxy<T> : RealProxy
+        private class ActualProxy<TInner> : RealProxy
         {
             private ISerializer serializer = new JsonSerializer();
             private IClientTransport transport;
@@ -72,7 +72,7 @@ namespace NetRPC.Client
             public IDictionary<string, string> RequestHeaderdata { get { return requestHeaderData; } }
             public IDictionary<string, string> ResponseHeaderdata { get { return responseHeaderData; } }
           
-            private object Process(Response response, IMethodCallMessage mcm)
+            private object Process(Message response, IMethodCallMessage mcm)
             {
                 var returnType = ((MethodInfo)mcm.MethodBase).ReturnType;
                 responseHeaderData = response.Headers;
@@ -86,16 +86,16 @@ namespace NetRPC.Client
                 return null;
             }
 
-            private Response Process(Request request)
+            private Message Process(Message request)
             {
-                var serializedRequest = serializer.SerializeRequest(request);
+                var serializedRequest = serializer.Serialize(request);
                 var response = transport.Request(serializedRequest);
-                return serializer.DeserializeResponse(response);
+                return serializer.Deserialize(response);
             }
 
-            private Request CreateRequest(IMethodCallMessage msg)
+            private Message CreateRequest(IMethodCallMessage msg)
             {
-                var request = new Request();
+                var request = new Message();
                 request.Method = msg.MethodName;
                 request.SessionId = Guid.NewGuid();
                 request.CallId = Guid.NewGuid();

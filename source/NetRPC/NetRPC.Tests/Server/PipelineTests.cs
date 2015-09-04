@@ -1,9 +1,9 @@
-﻿namespace NetRPC.Tests.Server
+﻿using NetRPC.Serialization;
+using NetRPC.Server;
+using Should;
+
+namespace NetRPC.Tests.Server
 {
-    using NetRPC.Server;
-    using NetRPC.Server;
-    using NetRPC.Serialization;
-    using Should;
     public class PipelineTests
     {
         private PipeTest pipetest;

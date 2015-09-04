@@ -78,7 +78,7 @@ namespace NetRPC.Tests
 
         protected string GetCall(string method, object[] parameters = null)
         {
-            var request = new Request
+            var request = new Message
             {
                 CallId = Guid.NewGuid(),
                 SessionId = Guid.NewGuid(),
@@ -86,7 +86,7 @@ namespace NetRPC.Tests
                 Version = Constants.Version,
                 Parameters = parameters == null ? null : parameters.Select(p => serializer.SerializeToParameter(p)).ToArray()
             };
-            return serializer.SerializeRequest(request);
+            return serializer.Serialize(request);
         }
 
     }
